@@ -1,3 +1,3 @@
-function cool() {
+function test() {
 
 }
