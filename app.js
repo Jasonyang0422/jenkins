@@ -1,3 +1,3 @@
 function test() {
-	console.log('nicecool');
+	console.log('awesome');
 }
