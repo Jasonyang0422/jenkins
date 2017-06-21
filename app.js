@@ -1,3 +1,3 @@
-function testS() {
+function test() {
 
 }
