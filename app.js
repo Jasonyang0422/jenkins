@@ -1,3 +1,3 @@
-function test() {
-	console.log('awesome');
+function tests() {
+	console.log('awesome --------------kaka');
 }
