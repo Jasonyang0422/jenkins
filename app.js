@@ -1,3 +1,3 @@
 function tests() {
-	console.log('awesome ------jekins');
+	console.log('awesome ------jekins---success');
 }
