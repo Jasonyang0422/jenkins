@@ -32,7 +32,7 @@ describe('Testing HR Chatbot', function() {
 	describe("Testing 'Get Started'", function() {
 		it('Recive two text messages and one image message within 9 seconds in order', function() {
 			return messengerDriver.get_started()
-				.then(messengerDriver.get_started_messages_check.bind(messengerDriver, 9000))
+				.then(messengerDriver.get_started_messages_check.bind(messengerDriver, 18000))
 				.then(function(result) {
 					// console.log("Messages record: ", messengerDriver.messagesRecord);
 					assert.isOk(result);
