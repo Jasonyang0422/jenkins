@@ -86,7 +86,7 @@ describe('Testing HR Chatbot', function() {
 
 		it('"Join Our Team": Recive three text messages, one image message, and quick reply within 9 seconds in order', function() {
 			return messengerDriver.join_our_team()
-				.then(messengerDriver.join_our_team_messages_check.bind(messengerDriver, 9000))
+				.then(messengerDriver.join_our_team_messages_check.bind(messengerDriver, 15000))
 				.then(function(result) {
 					// console.log("Messages record: ", messengerDriver.messagesRecord);
 					assert.isOk(result);
@@ -112,7 +112,7 @@ describe('Testing HR Chatbot', function() {
 
 		it('"Choose Job Type": Recive one text messages, one carousel, and quick reply within 9 seconds in order', function() {
 			return messengerDriver.choose_job_type()
-				.then(messengerDriver.choose_job_type_messages_check.bind(messengerDriver, 9000))
+				.then(messengerDriver.choose_job_type_messages_check.bind(messengerDriver, 15000))
 				.then(function(result) {
 					// console.log("Messages record: ", messengerDriver.messagesRecord);
 					assert.isOk(result);
