@@ -11,7 +11,7 @@ function Driver(browser) {
 	    	'username': asset.SAUCE_USERNAME,
 	    	'accessKey': asset.SAUCE_ACCESSKEY
 	    })
-	    .usingServer("http://" + username + ":" + accessKey +
+	    .usingServer("http://" + asset.SAUCE_USERNAME + ":" + asset.SAUCE_ACCESSKEY +
               "@ondemand.saucelabs.com:80/wd/hub")
 	    .build();
 
