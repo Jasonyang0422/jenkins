@@ -1,6 +1,7 @@
 var Promise = require('bluebird')
 var webdriver = require('selenium-webdriver');
 var asset = require('../asset.js');
+var TextMessages = require('../messages/textMessages');
 
 var By = webdriver.By;
 var until = webdriver.until;
@@ -77,12 +78,14 @@ function MessengerDriver(driver) {
 
 	this.quit = quit;
 
+	this.record_message = record_message;
+
 }
 
 module.exports = MessengerDriver;
 
 
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> class member <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> class member methods <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 function open_messenger_page() {
 	return this.driver.get(asset.HR_CHATBOT_URL);
@@ -111,7 +114,7 @@ function get_started() {
 
 	var that = this;
 
-	return that.driver.wait(until.elementLocated(By.linkText("Get Started")), 5000)
+	return that.driver.wait(until.elementLocated(By.linkText("Get Started")), 10000)
 		.then(function() {
 			that.driver.findElement(By.linkText("Get Started")).click()	
 		});
@@ -139,9 +142,11 @@ function get_started_messages_check(waitTime) {
 		]
 	};
 
+	var textMessages = new TextMessages(expectation['textMessages'], this);
+
 	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 3;
 
-	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
+	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime, textMessages);
 }
 
 function explore_vonage() {
@@ -361,6 +366,28 @@ function quit() {
 	return this.driver.quit();
 }
 
+function record_message(message, type) {
+
+	var that = this;
+
+	if(!(message.key in that.messagesRecord)) {
+		var messageIndex = Object.keys(that.messagesRecord).length;
+		
+		switch(type) {
+			case 'text':
+				console.log(messageIndex + ' -------------- ' + message.content);
+				that.messagesRecord[message.key] = {
+					index: messageIndex,
+					type: 'text',
+					tag: TextMessages.htmlTag,
+					content: message.content
+				};
+				break;
+		}
+					
+	}
+}
+
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> helper function <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -371,42 +398,12 @@ function quit() {
 //If multiple messages are detected within one check, mark the same index.
 // wait() is better because it is blocking
 
-function messages_check_helper(expectation, expectedMessagesLength, waitTime) {
+function messages_check_helper(expectation, expectedMessagesLength, waitTime, textMessages) {
 
 	var that = this;
 
 	return that.driver.wait(function() {
-		return that.driver.findElements(By.css("span[class='_3oh- _58nk']"))
-			.then(function(spans) {
-				if(spans) {
-
-					// use log to record spans length during last checking
-					// so previous messages will not be check
-					// it is in order to prevent from previous messages with same content being recorded
-					var startIndex = that.log.spansLength;
-					that.log.spansLength = spans.length;
-					spans = spans.slice(startIndex);
-					if(spans.length > 0) {
-						return Promise.each(spans, function(span) {
-							return span.getText().then(function(text) {
-								// console.log("CHECKING TEXT------ ", text);
-								expectation['textMessages'].forEach(function(textMessage) {
-									if(text.includes(textMessage.content) && !(textMessage.key in that.messagesRecord)) {
-										var messageIndex = Object.keys(that.messagesRecord).length;
-										console.log(messageIndex + ' -------------- ' + text);
-										that.messagesRecord[textMessage.key] = {
-											index: messageIndex,
-											type: 'text',
-											tag: '<span class="_3oh- _58nk">',
-											content: text
-										};							
-									}
-								});
-							});
-						});
-					}
-				}
-			})
+		return textMessages.text_messages_processor()
 			.then(function() {
 				if(expectation['imageMessages']) {
 					return that.driver.findElements(By.css("._52mr.img"))
@@ -555,41 +552,6 @@ function click_quick_reply(target) {
 			}
 		});
 }
-
-// function text_message_check_helper(key, message, waitTime) {
-
-// 	var that = this;
-
-// 	// wait() resolve true if conditition is satisfied
-// 	that.driver.wait(function() {
-// 		console.log('MOVING---- ', key);
-// 		return that.driver.findElements(By.css("span[class='_3oh- _58nk']"))
-// 			.then(function(spans) {
-// 				return Promise.each(spans, function(span, index, length) {
-// 					span.getText().then(function(text) {
-// 							if(text.includes(message) && !(key in that.messagesRecord)) {
-// 								var index = Object.keys(that.messagesRecord).length;
-
-// 								that.messagesRecord[key] = {
-// 									index: index,
-// 									type: 'text',
-// 									tag: '<span class="_3oh- _58nk">',
-// 									content: message
-// 								}
-// 							}
-// 						});
-// 				});
-// 			})
-// 			.then(function() {
-// 				if(key in that.messagesRecord) {
-// 					return true;
-// 				} else {
-// 					return false;
-// 				}
-// 			});
-// 	}, waitTime);
-// }
-
 
 function delay(t) {
    return new Promise(function(resolve) { 
