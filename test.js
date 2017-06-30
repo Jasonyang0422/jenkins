@@ -45,18 +45,18 @@ describe('Testing HR Chatbot', function() {
 	});
 
 	describe('Testing route: "Explore Vonage" -> "Our Culture" -> "Our Values" -> "Join Our Team"', function() {
-		// it('"Explore Vonage": Recive three text messages and quick reply within 9 seconds in order', function() {
-		// 	return messengerDriver.explore_vonage()
-		// 		.then(messengerDriver.explore_vonage_messages_check.bind(messengerDriver, 9000))
-		// 		.then(function(result) {
-		// 			// console.log("Messages record: ", messengerDriver.messagesRecord);
-		// 			assert.isOk(result);
-		// 		})
-		// 		.catch(function(err) {
-		// 			console.log(err);
-		// 			assert.isOk(false);
-		// 		});
-		// });
+		it('"Explore Vonage": Recive three text messages and quick reply within 9 seconds in order', function() {
+			return messengerDriver.explore_vonage()
+				.then(messengerDriver.explore_vonage_messages_check.bind(messengerDriver, 9000))
+				.then(function(result) {
+					// console.log("Messages record: ", messengerDriver.messagesRecord);
+					assert.isOk(result);
+				})
+				.catch(function(err) {
+					console.log(err);
+					assert.isOk(false);
+				});
+		});
 
 		// it('"Our Cultue": Recive two text messages, one video message, and quick reply within 9 seconds in order', function() {
 		// 	return messengerDriver.our_culture()

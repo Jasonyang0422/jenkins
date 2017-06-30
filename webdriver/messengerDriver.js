@@ -3,7 +3,8 @@ var webdriver = require('selenium-webdriver');
 
 var asset = require('../asset.js');
 var TextMessages = require('../messages/textMessages');
-var ImageMessages = require('../messages/imageMessages')
+var ImageMessages = require('../messages/imageMessages');
+var QuickReplyMessage = require('../messages/quickReplyMessage');
 
 var By = webdriver.By;
 var until = webdriver.until;
@@ -189,9 +190,12 @@ function explore_vonage_messages_check(waitTime) {
 		}
 	};
 
+	var textMessages = new TextMessages(expectation['textMessages'], this);
+	var quickReplyMessage = new QuickReplyMessage(expectation['quickReplyMessage'], this);
+
 	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 4;
 
-	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
+	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime, textMessages, null, quickReplyMessage);
 }
 
 function our_culture() { return click_quick_reply.call(this, "Our Culture"); }
@@ -395,6 +399,14 @@ function record_message(message, type) {
 					src: message.src
 				};
 				break;
+			case 'quickReply':
+				console.log(messageIndex + ' -------------- ' + 'quickReply');
+				that.messagesRecord[message.key] = {
+					index: messageIndex,
+					type: 'quick reply',
+					tag: '<div>',
+					options: message.options
+				};
 		}
 					
 	}
@@ -410,7 +422,7 @@ function record_message(message, type) {
 //If multiple messages are detected within one check, mark the same index.
 // wait() is better because it is blocking
 
-function messages_check_helper(expectation, expectedMessagesLength, waitTime, textMessages, imageMessages) {
+function messages_check_helper(expectation, expectedMessagesLength, waitTime, textMessages, imageMessages, quickReplyMessage) {
 
 	var that = this;
 
@@ -422,29 +434,8 @@ function messages_check_helper(expectation, expectedMessagesLength, waitTime, te
 				}
 			})
 			.then(function() {
-				if(expectation['quickReplyMessage']) {
-					return that.driver.findElements(By.css("div[class='_10-e']"));
-				}
-			})
-			.then(function(divs) {
-				//quick reply doesn't need log because previous one will disappear
-				if(divs && divs.length > 0) {
-					var key = expectation['quickReplyMessage'].key
-					if(!(key in that.messagesRecord)) {
-						var messageIndex = Object.keys(that.messagesRecord).length;
-						
-						console.log(messageIndex + ' -------------- ' + 'quickReply');
-						that.messagesRecord[key] = {
-							index: messageIndex,
-							type: 'quick reply',
-							tag: '<div>',
-							options: ''
-						};
-
-						return Promise.each(divs, function(div, index, length) {
-							return div.getText().then(function(text) { that.messagesRecord[key].options += (index + '. ' + text + ' '); })
-						});
-					}
+				if(quickReplyMessage) {
+					return quickReplyMessage.quick_reply_message_processor();
 				}
 			})
 			.then(function() {
