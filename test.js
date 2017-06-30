@@ -58,18 +58,18 @@ describe('Testing HR Chatbot', function() {
 				});
 		});
 
-		// it('"Our Cultue": Recive two text messages, one video message, and quick reply within 9 seconds in order', function() {
-		// 	return messengerDriver.our_culture()
-		// 		.then(messengerDriver.our_culture_messages_check.bind(messengerDriver, 9000))
-		// 		.then(function(result) {
-		// 			// console.log("Messages record: ", messengerDriver.messagesRecord);
-		// 			assert.isOk(result);
-		// 		})
-		// 		.catch(function(err) {
-		// 			console.log(err);
-		// 			assert.isOk(false);
-		// 		});
-		// });
+		it('"Our Cultue": Recive two text messages, one video message, and quick reply within 9 seconds in order', function() {
+			return messengerDriver.our_culture()
+				.then(messengerDriver.our_culture_messages_check.bind(messengerDriver, 9000))
+				.then(function(result) {
+					console.log("Messages record: ", messengerDriver.messagesRecord);
+					assert.isOk(result);
+				})
+				.catch(function(err) {
+					console.log(err);
+					assert.isOk(false);
+				});
+		});
 
 		// it('"Our Values": Recive two text messages, one video message, and quick reply within 9 seconds in order', function() {
 		// 	return messengerDriver.our_values()

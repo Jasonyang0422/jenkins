@@ -5,6 +5,7 @@ var asset = require('../asset.js');
 var TextMessages = require('../messages/textMessages');
 var ImageMessages = require('../messages/imageMessages');
 var QuickReplyMessage = require('../messages/quickReplyMessage');
+var VideoMessages = require('../messages/videoMessages');
 
 var By = webdriver.By;
 var until = webdriver.until;
@@ -226,9 +227,13 @@ function our_culture_messages_check(waitTime) {
 		}
 	};
 
+	var textMessages = new TextMessages(expectation['textMessages'], this);
+	var videoMessages = new VideoMessages(expectation['videoMessages'], this);
+	var quickReplyMessage = new QuickReplyMessage(expectation['quickReplyMessage'], this);
+
 	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 4;
 
-	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
+	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime, textMessages, null, quickReplyMessage, videoMessages);
 
 }
 
@@ -407,6 +412,16 @@ function record_message(message, type) {
 					tag: '<div>',
 					options: message.options
 				};
+				break;
+			case 'video':
+				console.log(messageIndex + ' -------------- ' + 'Video');
+				that.messagesRecord[message.key] = {
+					index: messageIndex,
+					type: 'video',
+					tag: '<video>',
+					src: message.src
+				};
+				break;					
 		}
 					
 	}
@@ -422,7 +437,7 @@ function record_message(message, type) {
 //If multiple messages are detected within one check, mark the same index.
 // wait() is better because it is blocking
 
-function messages_check_helper(expectation, expectedMessagesLength, waitTime, textMessages, imageMessages, quickReplyMessage) {
+function messages_check_helper(expectation, expectedMessagesLength, waitTime, textMessages, imageMessages, quickReplyMessage, videoMessages) {
 
 	var that = this;
 
@@ -439,34 +454,8 @@ function messages_check_helper(expectation, expectedMessagesLength, waitTime, te
 				}
 			})
 			.then(function() {
-				if(expectation['videoMessages']) {
-					return that.driver.findElements(By.css("video[class='_ox1']"));
-				}
-			})
-			.then(function(videos) {
-				if(videos) {
-					var startIndex = that.log.videosLength;
-					that.log.videosLength = videos.length;
-					videos = videos.slice(startIndex);
-
-					if(videos.length > 0) {
-						return Promise.each(videos, function(video) {
-							return video.getAttribute('src').then(function(src) {
-								expectation['videoMessages'].forEach(function(videoMessage) {
-									if(src.includes(videoMessage.src) && !(videoMessage.key in that.messagesRecord)) {
-										var messageIndex = Object.keys(that.messagesRecord).length;
-										console.log(messageIndex + ' -------------- ' + 'Video');
-										that.messagesRecord[videoMessage.key] = {
-											index: messageIndex,
-											type: 'video',
-											tag: '<video>',
-											src: src
-										};							
-									}
-								});
-							});
-						});
-					}
+				if(videoMessages) {
+					return videoMessages.video_messages_processor();
 				}
 			})
 			.then(function() {
