@@ -47,7 +47,7 @@ describe('Testing HR Chatbot', function() {
 	describe('Testing route: "Explore Vonage" -> "Our Culture" -> "Our Values" -> "Join Our Team"', function() {
 		it('"Explore Vonage": Recive three text messages and quick reply within 9 seconds in order', function() {
 			return messengerDriver.explore_vonage()
-				.then(messengerDriver.explore_vonage_messages_check.bind(messengerDriver, 9000))
+				.then(messengerDriver.explore_vonage_messages_check.bind(messengerDriver, 15000))
 				.then(function(result) {
 					// console.log("Messages record: ", messengerDriver.messagesRecord);
 					assert.isOk(result);
@@ -60,9 +60,9 @@ describe('Testing HR Chatbot', function() {
 
 		it('"Our Cultue": Recive two text messages, one video message, and quick reply within 9 seconds in order', function() {
 			return messengerDriver.our_culture()
-				.then(messengerDriver.our_culture_messages_check.bind(messengerDriver, 9000))
+				.then(messengerDriver.our_culture_messages_check.bind(messengerDriver, 15000))
 				.then(function(result) {
-					console.log("Messages record: ", messengerDriver.messagesRecord);
+					// console.log("Messages record: ", messengerDriver.messagesRecord);
 					assert.isOk(result);
 				})
 				.catch(function(err) {
@@ -71,57 +71,57 @@ describe('Testing HR Chatbot', function() {
 				});
 		});
 
-		// it('"Our Values": Recive two text messages, one video message, and quick reply within 9 seconds in order', function() {
-		// 	return messengerDriver.our_values()
-		// 		.then(messengerDriver.our_values_messages_check.bind(messengerDriver, 9000))
-		// 		.then(function(result) {
-		// 			// console.log("Messages record: ", messengerDriver.messagesRecord);
-		// 			assert.isOk(result);
-		// 		})
-		// 		.catch(function(err) {
-		// 			console.log(err);
-		// 			assert.isOk(false);
-		// 		});
-		// });
+		it('"Our Values": Recive two text messages, one video message, and quick reply within 9 seconds in order', function() {
+			return messengerDriver.our_values()
+				.then(messengerDriver.our_values_messages_check.bind(messengerDriver, 15000))
+				.then(function(result) {
+					// console.log("Messages record: ", messengerDriver.messagesRecord);
+					assert.isOk(result);
+				})
+				.catch(function(err) {
+					console.log(err);
+					assert.isOk(false);
+				});
+		});
 
-		// it('"Join Our Team": Recive three text messages, one image message, and quick reply within 9 seconds in order', function() {
-		// 	return messengerDriver.join_our_team()
-		// 		.then(messengerDriver.join_our_team_messages_check.bind(messengerDriver, 15000))
-		// 		.then(function(result) {
-		// 			// console.log("Messages record: ", messengerDriver.messagesRecord);
-		// 			assert.isOk(result);
-		// 		})
-		// 		.catch(function(err) {
-		// 			console.log(err);
-		// 			assert.isOk(false);
-		// 		});
-		// });
+		it('"Join Our Team": Recive three text messages, one image message, and quick reply within 9 seconds in order', function() {
+			return messengerDriver.join_our_team()
+				.then(messengerDriver.join_our_team_messages_check.bind(messengerDriver, 15000))
+				.then(function(result) {
+					// console.log("Messages record: ", messengerDriver.messagesRecord);
+					assert.isOk(result);
+				})
+				.catch(function(err) {
+					console.log(err);
+					assert.isOk(false);
+				});
+		});
 
-		// it('"Choose Location": Recive one text messages and quick reply within 9 seconds in order', function() {
-		// 	return messengerDriver.choose_location()
-		// 		.then(messengerDriver.choose_location_messages_check.bind(messengerDriver, 9000))
-		// 		.then(function(result) {
-		// 			// console.log("Messages record: ", messengerDriver.messagesRecord);
-		// 			assert.isOk(result);
-		// 		})
-		// 		.catch(function(err) {
-		// 			console.log(err);
-		// 			assert.isOk(false);
-		// 		});
-		// });
+		it('"Choose Location": Recive one text messages and quick reply within 9 seconds in order', function() {
+			return messengerDriver.choose_location()
+				.then(messengerDriver.choose_location_messages_check.bind(messengerDriver, 15000))
+				.then(function(result) {
+					// console.log("Messages record: ", messengerDriver.messagesRecord);
+					assert.isOk(result);
+				})
+				.catch(function(err) {
+					console.log(err);
+					assert.isOk(false);
+				});
+		});
 
-		// it('"Choose Job Type": Recive one text messages, one carousel, and quick reply within 9 seconds in order', function() {
-		// 	return messengerDriver.choose_job_type()
-		// 		.then(messengerDriver.choose_job_type_messages_check.bind(messengerDriver, 15000))
-		// 		.then(function(result) {
-		// 			// console.log("Messages record: ", messengerDriver.messagesRecord);
-		// 			assert.isOk(result);
-		// 		})
-		// 		.catch(function(err) {
-		// 			console.log(err);
-		// 			assert.isOk(false);
-		// 		});
-		// });
+		it('"Choose Job Type": Recive one text messages, one carousel, and quick reply within 9 seconds in order', function() {
+			return messengerDriver.choose_job_type()
+				.then(messengerDriver.choose_job_type_messages_check.bind(messengerDriver, 15000))
+				.then(function(result) {
+					// console.log("Messages record: ", messengerDriver.messagesRecord);
+					assert.isOk(result);
+				})
+				.catch(function(err) {
+					console.log(err);
+					assert.isOk(false);
+				});
+		});
 
 
 	});

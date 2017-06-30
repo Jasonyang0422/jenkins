@@ -1,4 +1,4 @@
-var Promise = require('bluebird')
+var Promise = require('bluebird');
 var webdriver = require('selenium-webdriver');
 
 var asset = require('../asset.js');
@@ -6,6 +6,7 @@ var TextMessages = require('../messages/textMessages');
 var ImageMessages = require('../messages/imageMessages');
 var QuickReplyMessage = require('../messages/quickReplyMessage');
 var VideoMessages = require('../messages/videoMessages');
+var CarouselMessages = require('../messages/carouselMessages');
 
 var By = webdriver.By;
 var until = webdriver.until;
@@ -151,7 +152,7 @@ function get_started_messages_check(waitTime) {
 
 	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 3;
 
-	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime, textMessages, imageMessages);
+	return messages_check_helper.call(this, {textMessages, imageMessages}, expectedMessagesLength, waitTime);
 }
 
 function explore_vonage() {
@@ -196,7 +197,7 @@ function explore_vonage_messages_check(waitTime) {
 
 	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 4;
 
-	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime, textMessages, null, quickReplyMessage);
+	return messages_check_helper.call(this, {textMessages, quickReplyMessage}, expectedMessagesLength, waitTime);
 }
 
 function our_culture() { return click_quick_reply.call(this, "Our Culture"); }
@@ -233,7 +234,7 @@ function our_culture_messages_check(waitTime) {
 
 	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 4;
 
-	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime, textMessages, null, quickReplyMessage, videoMessages);
+	return messages_check_helper.call(this, {textMessages, quickReplyMessage, videoMessages}, expectedMessagesLength, waitTime);
 
 }
 
@@ -267,7 +268,11 @@ function our_values_messages_check(waitTime) {
 
 	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 4;
 
-	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
+	var textMessages = new TextMessages(expectation['textMessages'], this);
+	var videoMessages = new VideoMessages(expectation['videoMessages'], this);
+	var quickReplyMessage = new QuickReplyMessage(expectation['quickReplyMessage'], this);
+
+	return messages_check_helper.call(this, {textMessages, videoMessages, quickReplyMessage}, expectedMessagesLength, waitTime);
 
 }
 
@@ -302,9 +307,13 @@ function join_our_team_messages_check(waitTime) {
 		}
 	};
 
+	var textMessages = new TextMessages(expectation['textMessages'], this);
+	var imageMessages = new ImageMessages(expectation['imageMessages'], this);
+	var quickReplyMessage = new QuickReplyMessage(expectation['quickReplyMessage'], this);
+
 	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 5;
 
-	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
+	return messages_check_helper.call(this, {textMessages, imageMessages, quickReplyMessage}, expectedMessagesLength, waitTime);
 }
 
 function choose_location() { return click_quick_reply.call(this, "Holmdel"); }
@@ -325,9 +334,12 @@ function choose_location_messages_check(waitTime) {
 		}
 	};
 
+	var textMessages = new TextMessages(expectation['textMessages'], this);
+	var quickReplyMessage = new QuickReplyMessage(expectation['quickReplyMessage'], this);
+
 	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 2;
 
-	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
+	return messages_check_helper.call(this, {textMessages, quickReplyMessage}, expectedMessagesLength, waitTime);
 }
 
 function choose_job_type() { return click_quick_reply.call(this, "Technology"); }
@@ -353,9 +365,13 @@ function choose_job_type_messages_check(waitTime) {
 		}
 	};
 
+	var textMessages = new TextMessages(expectation['textMessages'], this);
+	var carouselMessages = new CarouselMessages(expectation['carouselMessages'], this);
+	var quickReplyMessage = new QuickReplyMessage(expectation['quickReplyMessage'], this);
+
 	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 3;
 
-	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
+	return messages_check_helper.call(this, {textMessages, carouselMessages, quickReplyMessage}, expectedMessagesLength, waitTime);
 }
 
 function delete_conversation() {
@@ -421,7 +437,16 @@ function record_message(message, type) {
 					tag: '<video>',
 					src: message.src
 				};
-				break;					
+				break;
+			case 'carousel':
+				console.log(messageIndex + ' -------------- ' + 'carousel');
+				that.messagesRecord[message.key] = {
+					index: messageIndex,
+					type: 'carousel',
+					tag: '<div>'
+				};	
+				break;
+
 		}
 					
 	}
@@ -437,53 +462,30 @@ function record_message(message, type) {
 //If multiple messages are detected within one check, mark the same index.
 // wait() is better because it is blocking
 
-function messages_check_helper(expectation, expectedMessagesLength, waitTime, textMessages, imageMessages, quickReplyMessage, videoMessages) {
+function messages_check_helper(messages, expectedMessagesLength, waitTime) {
 
 	var that = this;
 
 	return that.driver.wait(function() {
-		return textMessages.text_messages_processor()
+		return messages.textMessages.text_messages_processor()
 			.then(function() {
-				if(imageMessages) {
-					return imageMessages.image_messages_processor();
+				if(messages.imageMessages) {
+					return messages.imageMessages.image_messages_processor();
 				}
 			})
 			.then(function() {
-				if(quickReplyMessage) {
-					return quickReplyMessage.quick_reply_message_processor();
+				if(messages.quickReplyMessage) {
+					return messages.quickReplyMessage.quick_reply_message_processor();
 				}
 			})
 			.then(function() {
-				if(videoMessages) {
-					return videoMessages.video_messages_processor();
+				if(messages.videoMessages) {
+					return messages.videoMessages.video_messages_processor();
 				}
 			})
 			.then(function() {
-				if(expectation['carouselMessages']) {
-					return that.driver.findElements(By.css("div[class='_52mr _2poz _ui9 _4skb _5i_d _205d _8ka']"));
-				}
-			})
-			.then(function(carousels) {
-				if(carousels) {
-					var startIndex = that.log.carouselsLength;
-					that.log.carouselsLength = carousels.length;
-					carousels = carousels.slice(startIndex);
-
-					if(carousels.length > 0) {
-						return Promise.each(carousels, function(carousel, index, length) {
-							// because image src is not be able to track because it changes constantly
-							var expectedCarousel = expectation['carouselMessages'][index];
-							if(!(expectedCarousel.key in that.messagesRecord)) {
-								var messageIndex = Object.keys(that.messagesRecord).length;
-								console.log(messageIndex + ' -------------- ' + 'carousel');
-								that.messagesRecord[expectedCarousel.key] = {
-									index: messageIndex,
-									type: 'carousel',
-									tag: '<div>'
-								};	
-							}
-						});
-					}
+				if(messages.carouselMessages) {
+					return messages.carouselMessages.carousel_messages_processor();
 				}
 			})
 			.then(function() {
