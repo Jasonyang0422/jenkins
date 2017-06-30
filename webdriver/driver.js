@@ -1,5 +1,5 @@
 var webdriver = require('selenium-webdriver');
-var asset = require('../asset')
+var asset = require('../asset/asset.js')
 
 function Driver(browser) {
 

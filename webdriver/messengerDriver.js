@@ -1,7 +1,7 @@
 var Promise = require('bluebird');
 var webdriver = require('selenium-webdriver');
 
-var asset = require('../asset.js');
+var asset = require('../asset/asset.js');
 var TextMessages = require('../messages/textMessages');
 var ImageMessages = require('../messages/imageMessages');
 var QuickReplyMessage = require('../messages/quickReplyMessage');
@@ -147,12 +147,9 @@ function get_started_messages_check(waitTime) {
 		]
 	};
 
-	var textMessages = new TextMessages(expectation['textMessages'], this);
-	var imageMessages = new ImageMessages(expectation['imageMessages'], this);
-
 	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 3;
 
-	return messages_check_helper.call(this, {textMessages, imageMessages}, expectedMessagesLength, waitTime);
+	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
 }
 
 function explore_vonage() {
@@ -192,12 +189,9 @@ function explore_vonage_messages_check(waitTime) {
 		}
 	};
 
-	var textMessages = new TextMessages(expectation['textMessages'], this);
-	var quickReplyMessage = new QuickReplyMessage(expectation['quickReplyMessage'], this);
-
 	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 4;
 
-	return messages_check_helper.call(this, {textMessages, quickReplyMessage}, expectedMessagesLength, waitTime);
+	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
 }
 
 function our_culture() { return click_quick_reply.call(this, "Our Culture"); }
@@ -228,13 +222,9 @@ function our_culture_messages_check(waitTime) {
 		}
 	};
 
-	var textMessages = new TextMessages(expectation['textMessages'], this);
-	var videoMessages = new VideoMessages(expectation['videoMessages'], this);
-	var quickReplyMessage = new QuickReplyMessage(expectation['quickReplyMessage'], this);
-
 	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 4;
 
-	return messages_check_helper.call(this, {textMessages, quickReplyMessage, videoMessages}, expectedMessagesLength, waitTime);
+	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
 
 }
 
@@ -268,11 +258,7 @@ function our_values_messages_check(waitTime) {
 
 	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 4;
 
-	var textMessages = new TextMessages(expectation['textMessages'], this);
-	var videoMessages = new VideoMessages(expectation['videoMessages'], this);
-	var quickReplyMessage = new QuickReplyMessage(expectation['quickReplyMessage'], this);
-
-	return messages_check_helper.call(this, {textMessages, videoMessages, quickReplyMessage}, expectedMessagesLength, waitTime);
+	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
 
 }
 
@@ -307,13 +293,9 @@ function join_our_team_messages_check(waitTime) {
 		}
 	};
 
-	var textMessages = new TextMessages(expectation['textMessages'], this);
-	var imageMessages = new ImageMessages(expectation['imageMessages'], this);
-	var quickReplyMessage = new QuickReplyMessage(expectation['quickReplyMessage'], this);
-
 	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 5;
 
-	return messages_check_helper.call(this, {textMessages, imageMessages, quickReplyMessage}, expectedMessagesLength, waitTime);
+	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
 }
 
 function choose_location() { return click_quick_reply.call(this, "Holmdel"); }
@@ -334,12 +316,9 @@ function choose_location_messages_check(waitTime) {
 		}
 	};
 
-	var textMessages = new TextMessages(expectation['textMessages'], this);
-	var quickReplyMessage = new QuickReplyMessage(expectation['quickReplyMessage'], this);
-
 	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 2;
 
-	return messages_check_helper.call(this, {textMessages, quickReplyMessage}, expectedMessagesLength, waitTime);
+	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
 }
 
 function choose_job_type() { return click_quick_reply.call(this, "Technology"); }
@@ -365,13 +344,9 @@ function choose_job_type_messages_check(waitTime) {
 		}
 	};
 
-	var textMessages = new TextMessages(expectation['textMessages'], this);
-	var carouselMessages = new CarouselMessages(expectation['carouselMessages'], this);
-	var quickReplyMessage = new QuickReplyMessage(expectation['quickReplyMessage'], this);
-
 	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 3;
 
-	return messages_check_helper.call(this, {textMessages, carouselMessages, quickReplyMessage}, expectedMessagesLength, waitTime);
+	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
 }
 
 function delete_conversation() {
@@ -462,7 +437,18 @@ function record_message(message, type) {
 //If multiple messages are detected within one check, mark the same index.
 // wait() is better because it is blocking
 
-function messages_check_helper(messages, expectedMessagesLength, waitTime) {
+function messages_check_helper(expectation, expectedMessagesLength, waitTime) {
+	var messages = {};
+	messages.textMessages = expectation['textMessages'] ? new TextMessages(expectation['textMessages'], this) : null;
+	messages.imageMessages = expectation['imageMessages'] ? new ImageMessages(expectation['imageMessages'], this) : null;
+	messages.quickReplyMessage = expectation['quickReplyMessage'] ? new QuickReplyMessage(expectation['quickReplyMessage'], this) : null;
+	messages.videoMessages = expectation['videoMessages'] ? new VideoMessages(expectation['videoMessages'], this) : null;
+	messages.carouselMessages = expectation['carouselMessages'] ? new CarouselMessages(expectation['carouselMessages'], this) : null;
+
+	return wait.call(this, messages, expectedMessagesLength, waitTime);
+}
+
+function wait(messages, expectedMessagesLength, waitTime) {
 
 	var that = this;
 
