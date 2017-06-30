@@ -1,7 +1,9 @@
 var Promise = require('bluebird')
 var webdriver = require('selenium-webdriver');
+
 var asset = require('../asset.js');
 var TextMessages = require('../messages/textMessages');
+var ImageMessages = require('../messages/imageMessages')
 
 var By = webdriver.By;
 var until = webdriver.until;
@@ -143,10 +145,11 @@ function get_started_messages_check(waitTime) {
 	};
 
 	var textMessages = new TextMessages(expectation['textMessages'], this);
+	var imageMessages = new ImageMessages(expectation['imageMessages'], this);
 
 	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 3;
 
-	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime, textMessages);
+	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime, textMessages, imageMessages);
 }
 
 function explore_vonage() {
@@ -383,6 +386,15 @@ function record_message(message, type) {
 					content: message.content
 				};
 				break;
+			case 'image':
+				console.log(messageIndex + ' -------------- ' + 'image');
+				that.messagesRecord[message.key] = {
+					index: messageIndex,
+					type: 'image',
+					tag: '<img>',
+					src: message.src
+				};
+				break;
 		}
 					
 	}
@@ -398,41 +410,15 @@ function record_message(message, type) {
 //If multiple messages are detected within one check, mark the same index.
 // wait() is better because it is blocking
 
-function messages_check_helper(expectation, expectedMessagesLength, waitTime, textMessages) {
+function messages_check_helper(expectation, expectedMessagesLength, waitTime, textMessages, imageMessages) {
 
 	var that = this;
 
 	return that.driver.wait(function() {
 		return textMessages.text_messages_processor()
 			.then(function() {
-				if(expectation['imageMessages']) {
-					return that.driver.findElements(By.css("._52mr.img"))
-				}
-			})
-			.then(function(imgs) {
-				if(imgs) {
-					var startIndex = that.log.imgsLength;
-					that.log.imgsLength = imgs.length;
-					imgs = imgs.slice(startIndex);
-
-					if(imgs.length > 0) {
-						return Promise.each(imgs, function(img, index, length) {
-							// because image src is not be able to track because it changes constantly
-							var expectedImage = expectation['imageMessages'][index];
-							if(!(expectedImage.key in that.messagesRecord)) {
-								return img.getAttribute('src').then(function(srcValue) {
-									var messageIndex = Object.keys(that.messagesRecord).length;
-									console.log(messageIndex + ' -------------- ' + 'image');
-									that.messagesRecord[expectedImage.key] = {
-										index: messageIndex,
-										type: 'image',
-										tag: '<img>',
-										src: srcValue
-									};	
-								});							
-							}
-						});
-					}
+				if(imageMessages) {
+					return imageMessages.image_messages_processor();
 				}
 			})
 			.then(function() {
