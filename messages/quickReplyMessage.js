@@ -21,7 +21,7 @@ function QuickReplyMessage(quickReplyMessage, messengerDriver) {
 	function process_quick_reply_elements(divs) {
 
 		var that = this;
-		
+
 		if(divs && divs.length > 0 && !(that.expectedQuickReplyMessage.key in messengerDriver.messagesRecord)) {
 			var options = ""
 			return Promise.each(divs, function(div, index, length) {
@@ -34,20 +34,6 @@ function QuickReplyMessage(quickReplyMessage, messengerDriver) {
 				messengerDriver.record_message(that.expectedQuickReplyMessage, 'quickReply');	
 			})
 		}
-
-	
-		// if(divs && divs.length > 0) {
-		// 	var options = ""
-		// 	return Promise.each(divs, function(div, index, length) {
-		// 		return div.getText().then(function(text) { 
-		// 			options += (index + '. ' + text + ' '); 
-		// 		});
-		// 	})
-		// 	.then(function() {
-		// 		that.expectedQuickReplyMessage.options = options;
-		// 		messengerDriver.record_message(that.expectedQuickReplyMessage, 'quickReply');	
-		// 	})
-		// }
 	};
 }
 
