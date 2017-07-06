@@ -1,12 +1,17 @@
 module.exports = {
 
-	HR_CHATBOT_URL: 'https://www.messenger.com/t/221625808345739',
+	// HR_CHATBOT_URL: 'https://www.messenger.com/t/221625808345739',
+	HR_CHATBOT_URL: 'https://www.messenger.com/t/VonageHR',
 
 	EMAIL: 'jy1964@nyu.edu',
 	PASSWORD: '0qweasdZXC',
 
 	SAUCE_USERNAME: 'jasonyang',
 	SAUCE_ACCESSKEY: 'c62d59f6-792a-4a5b-aa36-b46fc3d61cbf',
+
+	API_AI_ACCESS_TOKEN: 'aeae66330fa64529ab563db573119cb9',
+
+	GET_STARTED_INTENT_ID: "ba79b02f-1918-4017-a2b4-b6f6e874f88a",
 
 	GET_STARTED_FIRST_MESSAGE_CONTENT: 'Feel free to ask our agents any questions you might have.',
 	GET_STARTED_SECOND_MESSAGE_CONTENT: "If you wish to explore Vonage, please click on the menu button and choose 'Explore Vonage'.",

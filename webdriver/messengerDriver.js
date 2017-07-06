@@ -11,7 +11,7 @@ var CarouselMessages = require('../messages/carouselMessages');
 var By = webdriver.By;
 var until = webdriver.until;
 
-function MessengerDriver(driver) {
+function MessengerDriver(driver, expectations) {
 
 	this.GET_STARTED_FIRST_MESSAGE_KEY = 'get_started_first_message';
 	this.GET_STARTED_SECOND_MESSAGE_KEY = 'get_started_second_message';
@@ -46,6 +46,8 @@ function MessengerDriver(driver) {
 	this.CHOOSE_JOB_TYPE_THIRD_MESSAGE_KEY = 'choose_job_type_third_message';
 
 	this.driver = driver;
+
+	this.expectations = expectations;
 
 	this.messagesRecord = {};
 	this.log = {
@@ -138,25 +140,25 @@ function get_started_messages_check(waitTime) {
 	
 	var that = this
 
-	var expectation = {
-		textMessages: [
-			{
-				key: that.GET_STARTED_FIRST_MESSAGE_KEY,
-				content: asset.GET_STARTED_FIRST_MESSAGE_CONTENT
-			},
-			{
-				key: that.GET_STARTED_SECOND_MESSAGE_KEY,
-				content: asset.GET_STARTED_SECOND_MESSAGE_CONTENT
-			}
-		],
-		imageMessages: [
-			{
-				key: that.GET_STARTED_THIRD_MESSAGE_KEY
-			}
-		]
-	};
-
-	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 3;
+	// var expectation = {
+	// 	textMessages: [
+	// 		{
+	// 			key: that.GET_STARTED_FIRST_MESSAGE_KEY,
+	// 			content: asset.GET_STARTED_FIRST_MESSAGE_CONTENT
+	// 		},
+	// 		{
+	// 			key: that.GET_STARTED_SECOND_MESSAGE_KEY,
+	// 			content: asset.GET_STARTED_SECOND_MESSAGE_CONTENT
+	// 		}
+	// 	],
+	// 	imageMessages: [
+	// 		{
+	// 			key: that.GET_STARTED_THIRD_MESSAGE_KEY
+	// 		}
+	// 	]
+	// };
+	var expectation = this.expectations['get_started'];
+	var expectedMessagesLength = Object.keys(that.messagesRecord).length + expectation.messagesAmount;
 
 	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
 }
@@ -484,7 +486,9 @@ function wait(messages, expectedMessagesLength, waitTime) {
 				}
 			})
 			.then(function() {
-				return Object.keys(that.messagesRecord).length === expectedMessagesLength;
+				// console.log("OBJ>>>", typeof Object.keys(that.messagesRecord).length, Object.keys(that.messagesRecord).length)
+				// console.log("EXP>>>", typeof expectedMessagesLength, expectedMessagesLength);
+				return Object.keys(that.messagesRecord).length == expectedMessagesLength;
 			});
 	}, waitTime);
 

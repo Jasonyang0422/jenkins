@@ -35,6 +35,9 @@ function TextMessages(textMessages, messengerDriver) {
 				return Promise.each(spans, function(span) {
 					return span.getText().then(function(text) {
 						that.expectedTextMessages.forEach(function(textMessage) {
+
+							textMessage.content = string_filter(textMessage.content);
+
 							if(text.includes(textMessage.content)) {
 								//override the content with complete text
 								textMessage.content = text;
@@ -47,6 +50,13 @@ function TextMessages(textMessages, messengerDriver) {
 		}
 	};
 
+	function string_filter(string) {
+		if(string.includes('#')) {
+			return string.slice(0, string.indexOf('#'));
+		}
+		return string;
+	};
+
 }
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> static members <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -55,6 +65,14 @@ TextMessages.htmlTag = "span[class='_3oh- _58nk']";
 TextMessages.log = { spansLength: 0 };
 
 module.exports = TextMessages;
+
+
+
+
+
+
+
+
 
 
 
