@@ -124,7 +124,7 @@ function get_started() {
 			that.driver.findElement(By.linkText("Get Started")).click()	
 		})
 		.catch(function(err) {
-			if(err typeof webdriver.error.TimeoutError) {
+			if(err instanceof webdriver.error.TimeoutError) {
 				return that.delete_conversation()
 					.then(open_messenger_page.bind(that))
 					.then(get_started.bind(that));
