@@ -7,7 +7,7 @@ function Driver(browser) {
 	    .withCapabilities({
 	    	'browserName': browser,
 	    	'platform': 'MAC',
-	    	'version': '43.0',
+	    	'version': '59.0',
 	    	'username': asset.SAUCE_USERNAME,
 	    	'accessKey': asset.SAUCE_ACCESSKEY
 	    })
