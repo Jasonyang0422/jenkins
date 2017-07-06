@@ -119,9 +119,18 @@ function get_started() {
 
 	var that = this;
 
-	return that.driver.wait(until.elementLocated(By.linkText("Get Started")), 10000)
+	return that.driver.wait(until.elementLocated(By.linkText("Get Started")), 5000)
 		.then(function() {
 			that.driver.findElement(By.linkText("Get Started")).click()	
+		})
+		.catch(function(err) {
+			if(err typeof webdriver.error.TimeoutError) {
+				return that.delete_conversation()
+					.then(open_messenger_page.bind(that))
+					.then(get_started.bind(that));
+			} else {
+				throw err;
+			}
 		});
 }
 
