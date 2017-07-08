@@ -12,6 +12,20 @@ module.exports = {
 	API_AI_ACCESS_TOKEN: 'aeae66330fa64529ab563db573119cb9',
 
 	GET_STARTED_INTENT_ID: "ba79b02f-1918-4017-a2b4-b6f6e874f88a",
+	CONTACT_VEE_MENU_ITEM_INTENT_ID: "e89224aa-a10c-4582-91f4-c9c1feaa8ce7",
+	OUR_CULTURE_INTENT_ID: "ff492a99-f0dc-4c59-85df-412aecd7f048",
+	OUR_VALUES_INTENT_ID: "3272a2c6-431e-4c41-a138-5f3881626e55",
+	JOIN_OUR_TEAM_INTENT_ID: "f82739c3-e607-4ba6-8f56-80098906a44f",
+	FIND_AREA_OF_INTEREST_INTENT_ID: "36cfc911-75d4-4a5d-8b79-c3dfc0d165ff",
+	COLLECT_JOB_TYPE_INTENT_ID: "ebe7efb5-7514-4b61-aa76-8e29fdd7e9fc",
+
+	VIDEO_URL_MAP: {
+		// our culture video url,
+		"248753752273385": "/18828075_248753828940044_1993316574299160576_n.mp4/video-1496177383.mp4",
+
+		// our values video url
+		"248754215606672": "/18806285_248754268940000_7824282763690770432_n.mp4/video-1496177603.mp4"
+	},
 
 	GET_STARTED_FIRST_MESSAGE_CONTENT: 'Feel free to ask our agents any questions you might have.',
 	GET_STARTED_SECOND_MESSAGE_CONTENT: "If you wish to explore Vonage, please click on the menu button and choose 'Explore Vonage'.",

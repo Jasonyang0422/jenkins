@@ -137,28 +137,9 @@ function get_started() {
 }
 
 function get_started_messages_check(waitTime) {
-	
-	var that = this
 
-	// var expectation = {
-	// 	textMessages: [
-	// 		{
-	// 			key: that.GET_STARTED_FIRST_MESSAGE_KEY,
-	// 			content: asset.GET_STARTED_FIRST_MESSAGE_CONTENT
-	// 		},
-	// 		{
-	// 			key: that.GET_STARTED_SECOND_MESSAGE_KEY,
-	// 			content: asset.GET_STARTED_SECOND_MESSAGE_CONTENT
-	// 		}
-	// 	],
-	// 	imageMessages: [
-	// 		{
-	// 			key: that.GET_STARTED_THIRD_MESSAGE_KEY
-	// 		}
-	// 	]
-	// };
 	var expectation = this.expectations['get_started'];
-	var expectedMessagesLength = Object.keys(that.messagesRecord).length + expectation.messagesAmount;
+	var expectedMessagesLength = Object.keys(this.messagesRecord).length + expectation.messagesAmount;
 
 	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
 }
@@ -178,29 +159,8 @@ function explore_vonage() {
 
 function explore_vonage_messages_check(waitTime) {
 
-	var that = this;
-
-	var expectation = {
-		textMessages: [
-			{
-				key: that.EXPLORE_VONAGE_FIRST_MESSAGE_KEY,
-				content: asset.EXPLORE_VONAGE_FIRST_MESSAGE_CONTENT
-			},
-			{
-				key: that.EXPLORE_VONAGE_SECOND_MESSAGE_KEY,
-				content: asset.EXPLORE_VONAGE_SECOND_MESSAGE_CONTENT
-			},
-			{
-				key: that.EXPLORE_VONAGE_THIRD_MESSAGE_KEY,
-				content: asset.EXPLORE_VONAGE_THIRD_MESSAGE_CONTENT
-			}
-		],
-		quickReplyMessage: {
-			key: that.EXPLORE_VONAGE_FOURTH_MESSAGE_KEY
-		}
-	};
-
-	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 4;
+	var expectation = this.expectations['explore_vonage'];
+	var expectedMessagesLength = Object.keys(this.messagesRecord).length + expectation.messagesAmount;
 
 	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
 }
@@ -209,31 +169,8 @@ function our_culture() { return click_quick_reply.call(this, "Our Culture"); }
 
 function our_culture_messages_check(waitTime) {
 
-	var that = this;
-
-	var expectation = {
-		textMessages: [
-			{
-				key: that.OUR_CULTURE_FIRST_MESSAGE_KEY,
-				content: asset.OUR_CULTURE_FIRST_MESSAGE_CONTENT
-			},
-			{
-				key: that.OUR_CULTURE_THIRD_MESSAGE_KEY,
-				content: asset.OUR_CULTURE_THIRD_MESSAGE_CONTENT
-			}
-		],
-		videoMessages: [
-			{
-				key: that.OUR_CULTURE_SECOND_MESSAGE_KEY,
-				src: asset.OUR_CULTURE_VIDEO_SOURCE_ROOT
-			}
-		],
-		quickReplyMessage: {
-			key: that.OUR_CULTURE_FOURTH_MESSAGE_KEY
-		}
-	};
-
-	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 4;
+	var expectation = this.expectations['our_culture'];
+	var expectedMessagesLength = Object.keys(this.messagesRecord).length + expectation.messagesAmount;
 
 	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
 
@@ -243,31 +180,8 @@ function our_values() { return click_quick_reply.call(this, "Our Values"); }
 
 function our_values_messages_check(waitTime) {
 
-	var that = this;
-
-	var expectation = {
-		textMessages: [
-			{
-				key: that.OUR_VALUES_FIRST_MESSAGE_KEY,
-				content: asset.OUR_VALUES_FIRST_MESSAGE_CONTENT
-			},
-			{
-				key: that.OUR_VALUES_THIRD_MESSAGE_KEY,
-				content: asset.OUR_VALUES_THIRD_MESSAGE_CONTENT
-			}
-		],
-		videoMessages: [
-			{
-				key: that.OUR_VALUES_SECOND_MESSAGE_KEY,
-				src: asset.OUR_VALUES_VIDEO_SOURCE_ROOT
-			}
-		],
-		quickReplyMessage: {
-			key: that.OUR_VALUES_FOURTH_MESSAGE_KEY
-		}
-	};
-
-	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 4;
+	var expectation = this.expectations['our_values'];
+	var expectedMessagesLength = Object.keys(this.messagesRecord).length + expectation.messagesAmount;
 
 	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
 
@@ -277,34 +191,8 @@ function join_our_team() { return click_quick_reply.call(this, "Join Our Team");
 
 function join_our_team_messages_check(waitTime) {
 
-	var that = this;
-
-	var expectation = {
-		textMessages: [
-			{
-				key: that.JOIN_OUR_TEAM_SECOND_MESSAGE_KEY,
-				content: asset.JOIN_OUR_TEAM_SECOND_MESSAGE_CONTENT
-			},
-			{
-				key: that.JOIN_OUR_TEAM_THIRD_MESSAGE_KEY,
-				content: asset.JOIN_OUR_TEAM_THIRD_MESSAGE_CONTENT
-			},
-			{
-				key: that.JOIN_OUR_TEAM_FOURTH_MESSAGE_KEY,
-				content: asset.JOIN_OUR_TEAM_FOURTH_MESSAGE_CONTENT
-			}
-		],
-		imageMessages: [
-			{
-				key: that.JOIN_OUR_TEAM_FIRST_MESSAGE_KEY
-			}
-		],
-		quickReplyMessage: {
-			key: that.JOIN_OUR_TEAM_FIFTH_MESSAGE_KEY
-		}
-	};
-
-	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 5;
+	var expectation = this.expectations['join_our_team'];
+	var expectedMessagesLength = Object.keys(this.messagesRecord).length + expectation.messagesAmount;
 
 	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
 }
@@ -313,21 +201,8 @@ function choose_location() { return click_quick_reply.call(this, "Holmdel"); }
 
 function choose_location_messages_check(waitTime) {
 	
-	var that = this;
-
-	var expectation = {
-		textMessages: [
-			{
-				key: that.CHOOSE_LOCATION_FIRST_MESSAGE_KEY,
-				content: asset.CHOOSE_LOCATION_FIRST_MESSAGE_CONTENT
-			}
-		],
-		quickReplyMessage: {
-			key: that.CHOOSE_LOCATION_SECOND_MESSAGE_KEY
-		}
-	};
-
-	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 2;
+	var expectation = this.expectations['choose_location'];
+	var expectedMessagesLength = Object.keys(this.messagesRecord).length + expectation.messagesAmount;
 
 	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
 }
@@ -336,26 +211,26 @@ function choose_job_type() { return click_quick_reply.call(this, "Technology"); 
 
 function choose_job_type_messages_check(waitTime) {
 	
-	var that = this;
+	// var that = this;
 
-	var expectation = {
-		textMessages: [
-			{
-				key: that.CHOOSE_JOB_TYPE_SECOND_MESSAGE_KEY,
-				content: asset.CHOOSE_JOB_TYPE_SECOND_MESSAGE_CONTENT
-			}
-		],
-		carouselMessages: [
-			{
-				key: that.CHOOSE_JOB_TYPE_FIRST_MESSAGE_KEY,
-			}
-		],
-		quickReplyMessage: {
-			key: that.CHOOSE_JOB_TYPE_THIRD_MESSAGE_KEY
-		}
-	};
-
-	var expectedMessagesLength = Object.keys(that.messagesRecord).length + 3;
+	// var expectation = {
+	// 	textMessages: [
+	// 		{
+	// 			key: that.CHOOSE_JOB_TYPE_SECOND_MESSAGE_KEY,
+	// 			content: asset.CHOOSE_JOB_TYPE_SECOND_MESSAGE_CONTENT
+	// 		}
+	// 	],
+	// 	carouselMessages: [
+	// 		{
+	// 			key: that.CHOOSE_JOB_TYPE_FIRST_MESSAGE_KEY,
+	// 		}
+	// 	],
+	// 	quickReplyMessage: {
+	// 		key: that.CHOOSE_JOB_TYPE_THIRD_MESSAGE_KEY
+	// 	}
+	// };
+	var expectation = this.expectations['choose_job_type'];
+	var expectedMessagesLength = Object.keys(this.messagesRecord).length + expectation.messagesAmount;
 
 	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
 }
@@ -450,7 +325,7 @@ function record_message(message, type) {
 
 function messages_check_helper(expectation, expectedMessagesLength, waitTime) {
 	var messages = {};
-	messages.textMessages = expectation['textMessages'] ? new TextMessages(expectation['textMessages'], this) : null;
+	messages.textMessages = expectation['textMessages'] ? new TextMessages(expectation['textMessages'], this) : new TextMessages([], this);
 	messages.imageMessages = expectation['imageMessages'] ? new ImageMessages(expectation['imageMessages'], this) : null;
 	messages.quickReplyMessage = expectation['quickReplyMessage'] ? new QuickReplyMessage(expectation['quickReplyMessage'], this) : null;
 	messages.videoMessages = expectation['videoMessages'] ? new VideoMessages(expectation['videoMessages'], this) : null;

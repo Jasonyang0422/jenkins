@@ -21,19 +21,22 @@ function QuickReplyMessage(quickReplyMessage, messengerDriver) {
 	function process_quick_reply_elements(divs) {
 
 		var that = this;
+		var options = this.expectedQuickReplyMessage.options;
 
 		if(divs && divs.length > 0 && !(that.expectedQuickReplyMessage.key in messengerDriver.messagesRecord)) {
-			var options = ""
 			return Promise.each(divs, function(div, index, length) {
-				return div.getText().then(function(text) { 
-					options += (index + '. ' + text + ' '); 
+				return div.getText().then(function(text) {
+					if(text !== options[index]) {
+						throw new Error("'" + text + "' is not expected. Supposed option is '" + options[index] + "'");
+					}
 				});
 			})
 			.then(function() {
 				that.expectedQuickReplyMessage.options = options;
 				messengerDriver.record_message(that.expectedQuickReplyMessage, 'quickReply');	
-			})
+			});
 		}
+		 
 	};
 }
 

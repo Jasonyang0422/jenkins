@@ -51,9 +51,10 @@ function TextMessages(textMessages, messengerDriver) {
 	};
 
 	function string_filter(string) {
-		if(string.includes('#')) {
-			return string.slice(0, string.indexOf('#'));
-		}
+		string = string.includes('#') ? string.slice(0, string.indexOf('#')) : string;
+		string  = string.includes('😊') ? string.slice(0, string.indexOf('😊')) : string;
+		string  = string.includes("\u0026") ? string.slice(0, string.indexOf("\u0026")) : string;
+		string  = string.includes(':)') ? string.slice(0, string.indexOf(':)')) : string;
 		return string;
 	};
 
