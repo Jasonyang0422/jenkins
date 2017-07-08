@@ -13,38 +13,6 @@ var until = webdriver.until;
 
 function MessengerDriver(driver, expectations) {
 
-	this.GET_STARTED_FIRST_MESSAGE_KEY = 'get_started_first_message';
-	this.GET_STARTED_SECOND_MESSAGE_KEY = 'get_started_second_message';
-	this.GET_STARTED_THIRD_MESSAGE_KEY = 'get_started_third_message';
-
-	this.EXPLORE_VONAGE_FIRST_MESSAGE_KEY = 'explore_vonage_first_message';
-	this.EXPLORE_VONAGE_SECOND_MESSAGE_KEY = 'explore_vonage_second_message';
-	this.EXPLORE_VONAGE_THIRD_MESSAGE_KEY = 'explore_vonage_third_message';
-	this.EXPLORE_VONAGE_FOURTH_MESSAGE_KEY = 'explore_vonage_fourth_message';
-
-	this.OUR_CULTURE_FIRST_MESSAGE_KEY = 'our_culture_first_message';
-	this.OUR_CULTURE_SECOND_MESSAGE_KEY = 'our_culture_second_message';
-	this.OUR_CULTURE_THIRD_MESSAGE_KEY = 'our_culture_third_message';
-	this.OUR_CULTURE_FOURTH_MESSAGE_KEY = 'our_culture_fourth_message';
-
-	this.OUR_VALUES_FIRST_MESSAGE_KEY = 'our_values_first_message';
-	this.OUR_VALUES_SECOND_MESSAGE_KEY = 'our_values_second_message';
-	this.OUR_VALUES_THIRD_MESSAGE_KEY = 'our_values_third_message';
-	this.OUR_VALUES_FOURTH_MESSAGE_KEY = 'our_values_fourth_message';
-
-	this.JOIN_OUR_TEAM_FIRST_MESSAGE_KEY = 'join_our_team_first_message';
-	this.JOIN_OUR_TEAM_SECOND_MESSAGE_KEY = 'join_our_team_second_message';
-	this.JOIN_OUR_TEAM_THIRD_MESSAGE_KEY = 'join_our_team_third_message';
-	this.JOIN_OUR_TEAM_FOURTH_MESSAGE_KEY = 'join_our_team_fourth_message';
-	this.JOIN_OUR_TEAM_FIFTH_MESSAGE_KEY = 'join_our_team_fifth_message';
-
-	this.CHOOSE_LOCATION_FIRST_MESSAGE_KEY = 'choose_location_first_message';
-	this.CHOOSE_LOCATION_SECOND_MESSAGE_KEY = 'choose_location_second_message';
-
-	this.CHOOSE_JOB_TYPE_FIRST_MESSAGE_KEY = 'choose_job_type_first_message';
-	this.CHOOSE_JOB_TYPE_SECOND_MESSAGE_KEY = 'choose_job_type_second_message';
-	this.CHOOSE_JOB_TYPE_THIRD_MESSAGE_KEY = 'choose_job_type_third_message';
-
 	this.driver = driver;
 
 	this.expectations = expectations;

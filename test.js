@@ -16,7 +16,7 @@ describe('Testing HR Chatbot', function() {
 		// return promise is an alternative way to use done()
 		return expectations.getExpectations()
 		.then(function(exps) {
-			console.log(exps);
+			console.log("Expectations: ", exps);
 
 			messengerDriver = new MessengerDriver(driver, exps);
 			return messengerDriver.open_messenger_page();
