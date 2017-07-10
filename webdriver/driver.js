@@ -5,7 +5,7 @@ function Driver(browser, mode) {
 	if(mode === 'remote') {
 		var driver = new webdriver.Builder()
 			.forBrowser(browser)
-			.usingServer('http://10.111.99.162:4444/wd/hub')
+			.usingServer('http://10.111.99.162:5555/wd/hub')
 		    // .withCapabilities({
 		    // 	'browserName': browser,
 		    // 	'platform': 'MAC',
