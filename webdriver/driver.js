@@ -5,7 +5,7 @@ function Driver(browser, mode) {
 	if(mode === 'remote') {
 		var driver = new webdriver.Builder()
 			.forBrowser(browser)
-			.usingServer('http://32764f9e.ngrok.io/wd/hub')
+			.usingServer('http://1ec6b3fc.ngrok.io/wd/hub')
 		    // .withCapabilities({
 		    // 	'browserName': browser,
 		    // 	'platform': 'MAC',
