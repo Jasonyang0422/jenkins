@@ -11,7 +11,7 @@ describe('Testing HR Chatbot', function() {
 	var messengerDriver;
 
 	before(function() {
-		var driver = new Driver('chrome', 'local').getDriver();
+		var driver = new Driver('chrome', 'remote').getDriver();
 
 		// return promise is an alternative way to use done()
 		return expectations.getExpectations()
