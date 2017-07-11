@@ -5,7 +5,12 @@ function Driver(browser, mode) {
 	if(mode === 'remote') {
 		var driver = new webdriver.Builder()
 			.forBrowser(browser)
-			.usingServer('http://10.111.99.162:5555/wd/hub')
+			// .withCapabilities({
+			// 	'browserName': browser
+			// })
+			// .usingServer('http://localhost:4444/wd/hub')
+			.build();
+
 		    // .withCapabilities({
 		    // 	'browserName': browser,
 		    // 	'platform': 'MAC',
@@ -15,9 +20,8 @@ function Driver(browser, mode) {
 		    // })
 		    // .usingServer("http://" + asset.SAUCE_USERNAME + ":" + asset.SAUCE_ACCESSKEY +
 	     //          "@ondemand.saucelabs.com:80/wd/hub")
-		    .build();
+		    // .build();
 	}
-	//local test is used when developing
 	else if(mode === 'local') {
 		var driver = new webdriver.Builder()
 		    .forBrowser(browser)
@@ -25,7 +29,8 @@ function Driver(browser, mode) {
 	}
 
 	this.getDriver = function() { return driver; }
-	
+	this.mode = mode;
+	this.browser = browser;
 }
 
 module.exports = Driver;

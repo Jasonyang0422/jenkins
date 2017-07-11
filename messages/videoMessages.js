@@ -28,16 +28,31 @@ function VideoMessages(videoMessages, messengerDriver) {
 			videos = videos.slice(startIndex);
 
 			if(videos.length > 0) {
-				return Promise.each(videos, function(video) {
-					return video.getAttribute('src').then(function(src) {
-						that.expectedVideoMessages.forEach(function(videoMessage) {
-							if(src.includes(videoMessage.src)) {
-								videoMessage.src = src;
-								messengerDriver.record_message(videoMessage, 'video');
+
+				// phantomjs doesn't support video and audio. It can find the video tag though.
+				if(messengerDriver.browser == 'phantomjs') {
+					return Promise.each(videos, function(video) {
+						for(var i = 0; i < that.expectedVideoMessages.length; i++) {
+							var expectedVideo = that.expectedVideoMessages[i];
+							if(!(expectedVideo.key in messengerDriver.messagesRecord)) {
+								expectedVideo.src = null;
+								messengerDriver.record_message(expectedVideo, 'video');						
 							}
+						}
+					});
+				} else {
+					return Promise.each(videos, function(video) {
+						return video.getAttribute('src').then(function(src) {
+							that.expectedVideoMessages.forEach(function(videoMessage) {
+								if(src.includes(videoMessage.src)) {
+									videoMessage.src = src;
+									messengerDriver.record_message(videoMessage, 'video');
+								}
+							});
 						});
 					});
-				});
+
+				}
 			}
 		}
 	};

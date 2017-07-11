@@ -13,7 +13,9 @@ var until = webdriver.until;
 
 function MessengerDriver(driver, expectations) {
 
-	this.driver = driver;
+	this.driver = driver.getDriver();
+	this.browser = driver.browser;
+	this.mode = driver.mode;
 
 	this.expectations = expectations;
 
@@ -70,18 +72,37 @@ function log_into_messenger() {
 
 	var that = this
 
-	return that.driver.wait(until.elementLocated(By.name("email")), 3000)
+	return that.driver.manage().window().maximize()
 		.then(function() {
-			return that.driver.findElement(By.name("email")).sendKeys(asset.EMAIL);
+			return that.driver.wait(until.elementLocated(By.name("email")), 3000);
 		})
 		.then(function() {
-			return that.driver.wait(until.elementLocated(By.name("pass")), 3000);
+			return that.driver.findElement(By.name("email"));
+		})
+		.then(function(element) {
+			//wait until email input is displayed
+			return that.driver.wait(function() {
+				return element.isDisplayed()
+					.then(function(isDisplayed) {
+						// console.log("DISPLAYED>>>", isDisplayed);
+						return isDisplayed === true;
+					})
+			}, 10000)
+			.then(function() {
+				return element.sendKeys(asset.EMAIL);
+			})
 		})
 		.then(function() {
-			return that.driver.findElement(By.name("pass")).sendKeys(asset.PASSWORD);
+			return that.driver.findElement(By.name("pass"));
+		})
+		.then(function(element) {
+			return element.sendKeys(asset.PASSWORD);
 		})
 		.then(function() {
-			return that.driver.findElement(By.name("login")).click();
+			return that.driver.findElement(By.name("login"));
+		})
+		.then(function(element) {
+			return element.click();
 		});
 }
 
@@ -179,24 +200,6 @@ function choose_job_type() { return click_quick_reply.call(this, "Technology"); 
 
 function choose_job_type_messages_check(waitTime) {
 	
-	// var that = this;
-
-	// var expectation = {
-	// 	textMessages: [
-	// 		{
-	// 			key: that.CHOOSE_JOB_TYPE_SECOND_MESSAGE_KEY,
-	// 			content: asset.CHOOSE_JOB_TYPE_SECOND_MESSAGE_CONTENT
-	// 		}
-	// 	],
-	// 	carouselMessages: [
-	// 		{
-	// 			key: that.CHOOSE_JOB_TYPE_FIRST_MESSAGE_KEY,
-	// 		}
-	// 	],
-	// 	quickReplyMessage: {
-	// 		key: that.CHOOSE_JOB_TYPE_THIRD_MESSAGE_KEY
-	// 	}
-	// };
 	var expectation = this.expectations['choose_job_type'];
 	var expectedMessagesLength = Object.keys(this.messagesRecord).length + expectation.messagesAmount;
 
@@ -329,8 +332,6 @@ function wait(messages, expectedMessagesLength, waitTime) {
 				}
 			})
 			.then(function() {
-				// console.log("OBJ>>>", typeof Object.keys(that.messagesRecord).length, Object.keys(that.messagesRecord).length)
-				// console.log("EXP>>>", typeof expectedMessagesLength, expectedMessagesLength);
 				return Object.keys(that.messagesRecord).length == expectedMessagesLength;
 			});
 	}, waitTime);
@@ -363,11 +364,11 @@ function click_quick_reply(target) {
 		});
 }
 
-function delay(t) {
-   return new Promise(function(resolve) { 
-       setTimeout(resolve, t)
-   });
-}
+// function delay(t) {
+//    return new Promise(function(resolve) { 
+//        setTimeout(resolve, t)
+//    });
+// }
 
 
 

@@ -11,7 +11,7 @@ describe('Testing HR Chatbot', function() {
 	var messengerDriver;
 
 	before(function() {
-		var driver = new Driver('chrome', 'remote').getDriver();
+		var driver = new Driver('phantomjs', 'remote');
 
 		// return promise is an alternative way to use done()
 		return expectations.getExpectations()
@@ -25,7 +25,11 @@ describe('Testing HR Chatbot', function() {
 			return messengerDriver.log_into_messenger();
 		})
 		.catch(function(err) {
-			console.log(err);
+			messengerDriver.driver.takeScreenshot()
+				.then(function(str){ 
+					console.log(err);
+					console.log(str); 
+				});
 		});
 
 	});
@@ -77,8 +81,14 @@ describe('Testing HR Chatbot', function() {
 					assert.isOk(result);
 				})
 				.catch(function(err) {
-					console.log(err);
-					assert.isOk(false);
+					// console.log(err);
+					// assert.isOk(false);
+					messengerDriver.driver.takeScreenshot()
+						.then(function(str){ 
+							console.log(err);
+							console.log(str); 
+							assert.isOk(false);
+						});
 				});
 		});
 
