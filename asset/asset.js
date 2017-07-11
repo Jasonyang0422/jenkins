@@ -1,4 +1,4 @@
-module.exports = {
+var asset = {
 
 	// HR_CHATBOT_URL: 'https://www.messenger.com/t/221625808345739',
 	HR_CHATBOT_URL: 'https://www.messenger.com/t/VonageHR',
@@ -28,3 +28,5 @@ module.exports = {
 	}
 
 }
+
+module.exports = asset;
