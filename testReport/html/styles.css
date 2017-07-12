@@ -1,4 +1,30 @@
+body {
+	padding: 20px;
+}
+
+#title {
+	text-align: center;
+	color: #ff8300;
+}
+
+#container {
+	list-style-type: none;
+}
+
+.screenshot_title {
+	color: #004a74;
+}
+
 .screenshot {
-	width: 500px;
+	width: 1000px;
+	height: auto;
+}
+
+hr {
+	border-color: #ff8300;
+}
+
+#logo {
+	width: 150px;
 	height: auto;
 }
