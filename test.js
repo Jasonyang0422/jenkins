@@ -2,6 +2,7 @@ var assert = require('chai').assert;
 var Driver = require('./webdriver/driver.js');
 var MessengerDriver = require('./webdriver/messengerDriver.js');
 var expectations = require('./expectations/expectations.js');
+var fs = require('fs');
 
 
 describe('Testing HR Chatbot', function() {
@@ -35,9 +36,23 @@ describe('Testing HR Chatbot', function() {
 	});
 
 	after(function() {
-		return messengerDriver.delete_conversation()
+		return messengerDriver.driver.takeScreenshot()
+			.then(function(str) {
+				return new Promise(function() {
+					fs.writeFile("./testReport/html/variables.js", "var SCREENSHOTS = ['" + str + "'];", function(err) {
+					    if(err) {
+					        return console.log(err);
+					    }
+
+					    console.log("The file was saved!");
+					});
+				});
+			})
 			.then(function() {
-				messengerDriver.quit();
+				return messengerDriver.delete_conversation();
+			})
+			.then(function() {
+				return messengerDriver.quit();
 			})
 			.catch(function(err) {
 				console.log(err);
