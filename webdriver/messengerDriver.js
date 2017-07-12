@@ -57,7 +57,7 @@ function MessengerDriver(driver, expectations) {
 
 	this.record_message = record_message;
 
-	this.takeScreenshot = takeScreenshot;
+	this.takeScreenshotThenSaveToFile = takeScreenshotThenSaveToFile;
 
 }
 
@@ -286,8 +286,26 @@ function record_message(message, type) {
 	}
 }
 
-function takeScreenshot() {
-	return this.driver.takeScreenshot();
+function takeScreenshotThenSaveToFile(title, fileSystem) {
+	return this.driver.takeScreenshot()
+		.then(function(imageStr) {
+			var objectStr = fileSystem.createObjectStr({
+				title: title,
+				imageStr: imageStr
+			});
+			if(!fileSystem.arrayExist) {
+				return fileSystem.writeArrayToFile(objectStr, 'SCREENSHOTS');
+			} else {
+				return fileSystem.pushToArrayInFile(objectStr);
+			}
+		})
+		.then(function(info) {
+			console.log(info);
+		})
+		.catch(function(err) {
+			console.log("Failed: taking screenshots and save to file")
+			console.log(err);
+		});
 }
 
 

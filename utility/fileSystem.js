@@ -4,10 +4,13 @@ function FileSystem(filePath) {
 
 	this.filePath = filePath;
 
+	this.arrayExist = false;
+
 	this.writeFile = writeFile;
 	this.readFile = readFile;
 	this.writeArrayToFile = writeArrayToFile;
 	this.pushToArrayInFile = pushToArrayInFile;
+	this.createObjectStr = createObjectStr;
 
 }
 
@@ -21,7 +24,8 @@ function writeFile(string) {
 		    if(err) { 
 		    	reject(err); 
 		    } else {
-				resolve("The file was saved!");
+		    	that.arrayExist = true;
+				resolve("Success: the screenshot has been saved to variables.js!");
 		    }
 		});
 	});
@@ -41,29 +45,32 @@ function readFile() {
 	});
 }
 
-function writeArrayToFile(string, variableName) {
+function writeArrayToFile(objectStr, variableName) {
 	var that = this;
 
-	return this.writeFile("var " + variableName + " = ['" + string + "'];");
+	return this.writeFile('var ' + variableName + ' = [' + objectStr + '];');
 }
 
-function pushToArrayInFile(string) {
+function pushToArrayInFile(objectStr) {
 	var that = this;
 	
 	return this.readFile()
 		.then(function(originalStr) {
 			if(originalStr.length > 0) {
 				var len = originalStr.length;
-				var newStr = originalStr.slice(0, len - 2) + ", '" + string + "'];";
+				var newStr = originalStr.slice(0, len - 2) + ', ' + objectStr + '];';
 				return that.writeFile(newStr);
 			}
 		});
 }
 
-function imageStringProcessor(imageStr) {
-
+function createObjectStr(obj) {
+	var str = "{ "
+	for(var key in obj) {
+		str += (key + ': "' + obj[key] + '",');
+	}
+	return str.slice(0, str.length - 1) + ' }';
 }
-
 
 
 

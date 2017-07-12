@@ -28,41 +28,27 @@ describe('Testing HR Chatbot', function() {
 			return messengerDriver.log_into_messenger();
 		})
 		.catch(function(err) {
-			messengerDriver.driver.takeScreenshot()
-				.then(function(str){ 
+			return messengerDriver.takeScreenshotThenSaveToFile("Log in (Failed)", variablesFile);
+				.then(function(){ 
 					console.log(err);
-					console.log(str); 
 				});
 		});
 
 	});
 
 	after(function() {
-		// return messengerDriver.driver.takeScreenshot()
-		// 	.then(function(str) {
-		// 		return new Promise(function(resolve, reject) {
-		// 			fs.writeFile("./testReport/html/variables.js", "var SCREENSHOTS = ['" + str + "'];", function(err) {
-		// 			    if(err) {
-		// 			        return console.log(err);
-		// 			    }
-
-		// 			    resolve("The file was saved!");
-		// 			});
-		// 		});
-		// 	})
-		return messengerDriver.takeScreenshot()
-			.then(function(imageStr) {
-				return variablesFile.pushToArrayInFile(imageStr);
-			})
-			.then(function(info) {
-				console.log("TEST OVER ", info);
+		return messengerDriver.takeScreenshotThenSaveToFile("Test is over", variablesFile)
+			.then(function() {
 				return messengerDriver.delete_conversation();
 			})
 			.then(function() {
 				return messengerDriver.quit();
 			})
 			.catch(function(err) {
-				console.log(err);
+				return messengerDriver.takeScreenshotThenSaveToFile("Delete conversation and close browser (Failed)", variablesFile);
+					.then(function(){ 
+						console.log(err);
+					});
 			});
 	});
 
@@ -73,17 +59,14 @@ describe('Testing HR Chatbot', function() {
 				.then(function(result) {
 					// console.log("Messages record: ", messengerDriver.messagesRecord);
 					assert.isOk(result);
-					return messengerDriver.takeScreenshot();
-				})
-				.then(function(imageStr) {
-					return variablesFile.writeArrayToFile(imageStr, 'SCREENSHOTS');
-				})
-				.then(function(info) {
-					console.log("GET STARTED: ", info);
+					return messengerDriver.takeScreenshotThenSaveToFile("Get Started (Success)", variablesFile);
 				})
 				.catch(function(err) {
-					console.log(err);
-					assert.isOk(false);
+					return messengerDriver.takeScreenshotThenSaveToFile("Get Started (Failed)", variablesFile);
+						.then(function(){ 
+							console.log(err);
+							assert.isOk(false);
+						});
 				});
 		});
 	});
@@ -95,10 +78,14 @@ describe('Testing HR Chatbot', function() {
 				.then(function(result) {
 					// console.log("Messages record: ", messengerDriver.messagesRecord);
 					assert.isOk(result);
+					return messengerDriver.takeScreenshotThenSaveToFile("Explore Vonage (Success)", variablesFile);
 				})
 				.catch(function(err) {
-					console.log(err);
-					assert.isOk(false);
+					return messengerDriver.takeScreenshotThenSaveToFile("Explore Vonage (Failed)", variablesFile);
+						.then(function(){ 
+							console.log(err);
+							assert.isOk(false);
+						});
 				});
 		});
 
@@ -108,14 +95,12 @@ describe('Testing HR Chatbot', function() {
 				.then(function(result) {
 					// console.log("Messages record: ", messengerDriver.messagesRecord);
 					assert.isOk(result);
+					return messengerDriver.takeScreenshotThenSaveToFile("Our Cultue (Success)", variablesFile);
 				})
 				.catch(function(err) {
-					// console.log(err);
-					// assert.isOk(false);
-					messengerDriver.driver.takeScreenshot()
-						.then(function(str){ 
+					return messengerDriver.takeScreenshotThenSaveToFile("Our Culture (Failed)", variablesFile);
+						.then(function(){ 
 							console.log(err);
-							console.log(str); 
 							assert.isOk(false);
 						});
 				});
@@ -127,10 +112,14 @@ describe('Testing HR Chatbot', function() {
 				.then(function(result) {
 					// console.log("Messages record: ", messengerDriver.messagesRecord);
 					assert.isOk(result);
+					return messengerDriver.takeScreenshotThenSaveToFile("Our Values (Success)", variablesFile);
 				})
 				.catch(function(err) {
-					console.log(err);
-					assert.isOk(false);
+					return messengerDriver.takeScreenshotThenSaveToFile("Our Values (Failed)", variablesFile);
+						.then(function(){ 
+							console.log(err);
+							assert.isOk(false);
+						});
 				});
 		});
 
@@ -140,10 +129,14 @@ describe('Testing HR Chatbot', function() {
 				.then(function(result) {
 					// console.log("Messages record: ", messengerDriver.messagesRecord);
 					assert.isOk(result);
+					return messengerDriver.takeScreenshotThenSaveToFile("Join Our Team (Success)", variablesFile);
 				})
 				.catch(function(err) {
-					console.log(err);
-					assert.isOk(false);
+					return messengerDriver.takeScreenshotThenSaveToFile("Join Our Team (Failed)", variablesFile);
+						.then(function(){ 
+							console.log(err);
+							assert.isOk(false);
+						});
 				});
 		});
 
@@ -153,10 +146,14 @@ describe('Testing HR Chatbot', function() {
 				.then(function(result) {
 					// console.log("Messages record: ", messengerDriver.messagesRecord);
 					assert.isOk(result);
+					return messengerDriver.takeScreenshotThenSaveToFile("Choose Location (Success)", variablesFile);
 				})
 				.catch(function(err) {
-					console.log(err);
-					assert.isOk(false);
+					return messengerDriver.takeScreenshotThenSaveToFile("Choose Location (Failed)", variablesFile);
+						.then(function(){ 
+							console.log(err);
+							assert.isOk(false);
+						});
 				});
 		});
 
@@ -166,10 +163,14 @@ describe('Testing HR Chatbot', function() {
 				.then(function(result) {
 					// console.log("Messages record: ", messengerDriver.messagesRecord);
 					assert.isOk(result);
+					return messengerDriver.takeScreenshotThenSaveToFile("Choose Job Type (Success)", variablesFile);
 				})
 				.catch(function(err) {
-					console.log(err);
-					assert.isOk(false);
+					return messengerDriver.takeScreenshotThenSaveToFile("Choose Job Type (Failed)", variablesFile);
+						.then(function(){ 
+							console.log(err);
+							assert.isOk(false);
+						});
 				});
 		});
 
