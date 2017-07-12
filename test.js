@@ -38,17 +38,18 @@ describe('Testing HR Chatbot', function() {
 	after(function() {
 		return messengerDriver.driver.takeScreenshot()
 			.then(function(str) {
-				return new Promise(function() {
+				return new Promise(function(resolve, reject) {
 					fs.writeFile("./testReport/html/variables.js", "var SCREENSHOTS = ['" + str + "'];", function(err) {
 					    if(err) {
 					        return console.log(err);
 					    }
 
-					    console.log("The file was saved!");
+					    resolve("The file was saved!");
 					});
 				});
 			})
-			.then(function() {
+			.then(function(info) {
+				console.log(info)
 				return messengerDriver.delete_conversation();
 			})
 			.then(function() {
