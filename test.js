@@ -28,7 +28,7 @@ describe('Testing HR Chatbot', function() {
 			return messengerDriver.log_into_messenger();
 		})
 		.catch(function(err) {
-			return messengerDriver.takeScreenshotThenSaveToFile("Log in (Failed)", variablesFile);
+			return messengerDriver.takeScreenshotThenSaveToFile("Log in (Failed)", variablesFile)
 				.then(function(){ 
 					console.log(err);
 				});
@@ -45,7 +45,7 @@ describe('Testing HR Chatbot', function() {
 				return messengerDriver.quit();
 			})
 			.catch(function(err) {
-				return messengerDriver.takeScreenshotThenSaveToFile("Delete conversation and close browser (Failed)", variablesFile);
+				return messengerDriver.takeScreenshotThenSaveToFile("Delete conversation and close browser (Failed)", variablesFile)
 					.then(function(){ 
 						console.log(err);
 					});
@@ -62,7 +62,7 @@ describe('Testing HR Chatbot', function() {
 					return messengerDriver.takeScreenshotThenSaveToFile("Get Started (Success)", variablesFile);
 				})
 				.catch(function(err) {
-					return messengerDriver.takeScreenshotThenSaveToFile("Get Started (Failed)", variablesFile);
+					return messengerDriver.takeScreenshotThenSaveToFile("Get Started (Failed)", variablesFile)
 						.then(function(){ 
 							console.log(err);
 							assert.isOk(false);
@@ -81,7 +81,7 @@ describe('Testing HR Chatbot', function() {
 					return messengerDriver.takeScreenshotThenSaveToFile("Explore Vonage (Success)", variablesFile);
 				})
 				.catch(function(err) {
-					return messengerDriver.takeScreenshotThenSaveToFile("Explore Vonage (Failed)", variablesFile);
+					return messengerDriver.takeScreenshotThenSaveToFile("Explore Vonage (Failed)", variablesFile)
 						.then(function(){ 
 							console.log(err);
 							assert.isOk(false);
@@ -98,7 +98,7 @@ describe('Testing HR Chatbot', function() {
 					return messengerDriver.takeScreenshotThenSaveToFile("Our Cultue (Success)", variablesFile);
 				})
 				.catch(function(err) {
-					return messengerDriver.takeScreenshotThenSaveToFile("Our Culture (Failed)", variablesFile);
+					return messengerDriver.takeScreenshotThenSaveToFile("Our Culture (Failed)", variablesFile)
 						.then(function(){ 
 							console.log(err);
 							assert.isOk(false);
@@ -115,7 +115,7 @@ describe('Testing HR Chatbot', function() {
 					return messengerDriver.takeScreenshotThenSaveToFile("Our Values (Success)", variablesFile);
 				})
 				.catch(function(err) {
-					return messengerDriver.takeScreenshotThenSaveToFile("Our Values (Failed)", variablesFile);
+					return messengerDriver.takeScreenshotThenSaveToFile("Our Values (Failed)", variablesFile)
 						.then(function(){ 
 							console.log(err);
 							assert.isOk(false);
@@ -132,7 +132,7 @@ describe('Testing HR Chatbot', function() {
 					return messengerDriver.takeScreenshotThenSaveToFile("Join Our Team (Success)", variablesFile);
 				})
 				.catch(function(err) {
-					return messengerDriver.takeScreenshotThenSaveToFile("Join Our Team (Failed)", variablesFile);
+					return messengerDriver.takeScreenshotThenSaveToFile("Join Our Team (Failed)", variablesFile)
 						.then(function(){ 
 							console.log(err);
 							assert.isOk(false);
@@ -149,7 +149,7 @@ describe('Testing HR Chatbot', function() {
 					return messengerDriver.takeScreenshotThenSaveToFile("Choose Location (Success)", variablesFile);
 				})
 				.catch(function(err) {
-					return messengerDriver.takeScreenshotThenSaveToFile("Choose Location (Failed)", variablesFile);
+					return messengerDriver.takeScreenshotThenSaveToFile("Choose Location (Failed)", variablesFile)
 						.then(function(){ 
 							console.log(err);
 							assert.isOk(false);
@@ -166,7 +166,7 @@ describe('Testing HR Chatbot', function() {
 					return messengerDriver.takeScreenshotThenSaveToFile("Choose Job Type (Success)", variablesFile);
 				})
 				.catch(function(err) {
-					return messengerDriver.takeScreenshotThenSaveToFile("Choose Job Type (Failed)", variablesFile);
+					return messengerDriver.takeScreenshotThenSaveToFile("Choose Job Type (Failed)", variablesFile)
 						.then(function(){ 
 							console.log(err);
 							assert.isOk(false);
