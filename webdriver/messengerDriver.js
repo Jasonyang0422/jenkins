@@ -57,6 +57,8 @@ function MessengerDriver(driver, expectations) {
 
 	this.record_message = record_message;
 
+	this.takeScreenshot = takeScreenshot;
+
 }
 
 module.exports = MessengerDriver;
@@ -282,6 +284,10 @@ function record_message(message, type) {
 		}
 					
 	}
+}
+
+function takeScreenshot() {
+	return this.driver.takeScreenshot();
 }
 
 

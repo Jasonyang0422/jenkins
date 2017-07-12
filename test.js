@@ -2,7 +2,7 @@ var assert = require('chai').assert;
 var Driver = require('./webdriver/driver.js');
 var MessengerDriver = require('./webdriver/messengerDriver.js');
 var expectations = require('./expectations/expectations.js');
-var fs = require('fs');
+var FileSystem = require('./utility/fileSystem.js');
 
 
 describe('Testing HR Chatbot', function() {
@@ -10,9 +10,11 @@ describe('Testing HR Chatbot', function() {
 	this.timeout(1000000);
 
 	var messengerDriver;
+	var variablesFile;
 
 	before(function() {
 		var driver = new Driver('phantomjs', 'remote');
+		variablesFile = new FileSystem("./testReport/html/variables.js");
 
 		// return promise is an alternative way to use done()
 		return expectations.getExpectations()
@@ -36,20 +38,24 @@ describe('Testing HR Chatbot', function() {
 	});
 
 	after(function() {
-		return messengerDriver.driver.takeScreenshot()
-			.then(function(str) {
-				return new Promise(function(resolve, reject) {
-					fs.writeFile("./testReport/html/variables.js", "var SCREENSHOTS = ['" + str + "'];", function(err) {
-					    if(err) {
-					        return console.log(err);
-					    }
+		// return messengerDriver.driver.takeScreenshot()
+		// 	.then(function(str) {
+		// 		return new Promise(function(resolve, reject) {
+		// 			fs.writeFile("./testReport/html/variables.js", "var SCREENSHOTS = ['" + str + "'];", function(err) {
+		// 			    if(err) {
+		// 			        return console.log(err);
+		// 			    }
 
-					    resolve("The file was saved!");
-					});
-				});
+		// 			    resolve("The file was saved!");
+		// 			});
+		// 		});
+		// 	})
+		return messengerDriver.takeScreenshot()
+			.then(function(imageStr) {
+				variablesFile.pushToArrayInFile(imageStr);
 			})
 			.then(function(info) {
-				console.log(info)
+				console.log("TEST OVER ", info);
 				return messengerDriver.delete_conversation();
 			})
 			.then(function() {
@@ -67,6 +73,13 @@ describe('Testing HR Chatbot', function() {
 				.then(function(result) {
 					// console.log("Messages record: ", messengerDriver.messagesRecord);
 					assert.isOk(result);
+					return messengerDriver.takeScreenshot();
+				})
+				.then(function(imageStr) {
+					return variablesFile.writeArrayToFile(imageStr, 'SCREENSHOTS');
+				})
+				.then(function(info) {
+					console.log("GET STARTED: ", info);
 				})
 				.catch(function(err) {
 					console.log(err);
