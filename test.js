@@ -52,7 +52,7 @@ describe('Testing HR Chatbot', function() {
 		// 	})
 		return messengerDriver.takeScreenshot()
 			.then(function(imageStr) {
-				variablesFile.pushToArrayInFile(imageStr);
+				return variablesFile.pushToArrayInFile(imageStr);
 			})
 			.then(function(info) {
 				console.log("TEST OVER ", info);
