@@ -1,6 +1,7 @@
 var Promise = require('bluebird')
 var By = require('selenium-webdriver').By;
 var until = require('selenium-webdriver').until;
+var emojiStrip = require('emoji-strip');
 
 function TextMessages(textMessages, messengerDriver) {
 
@@ -35,13 +36,17 @@ function TextMessages(textMessages, messengerDriver) {
 				return Promise.each(spans, function(span) {
 					return span.getText().then(function(text) {
 						that.expectedTextMessages.forEach(function(textMessage) {
-
 							textMessage.content = string_filter(textMessage.content);
+
+							if(textMessage.content === ' ' || textMessage.content === '') {
+								textMessage.content = "message is empty after strip emoji and variables starting with #";
+								return messengerDriver.record_message(textMessage, 'text');
+							}
 
 							if(text.includes(textMessage.content)) {
 								//override the content with complete text
 								textMessage.content = text;
-								messengerDriver.record_message(textMessage, 'text');			
+								return messengerDriver.record_message(textMessage, 'text');			
 							}
 						});
 					});
@@ -52,9 +57,11 @@ function TextMessages(textMessages, messengerDriver) {
 
 	function string_filter(string) {
 		string = string.includes('#') ? string.slice(0, string.indexOf('#')) : string;
-		string  = string.includes('😊') ? string.slice(0, string.indexOf('😊')) : string;
+		// string  = string.includes('😊') ? string.slice(0, string.indexOf('😊')) : string;
 		string  = string.includes("\u0026") ? string.slice(0, string.indexOf("\u0026")) : string;
 		string  = string.includes(':)') ? string.slice(0, string.indexOf(':)')) : string;
+
+		string = emojiStrip(string);
 		return string;
 	};
 

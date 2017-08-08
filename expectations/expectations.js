@@ -8,6 +8,10 @@ function getExpectations() {
 	return get_started_expectation()
 		.then(function(expectation) {
 			expectations['get_started'] = expectation;
+			return mind_blown_expectation();
+		})
+		.then(function(expectation) {
+			expectations['mind_blown'] = expectation;
 			return explore_vonage_expectation();
 		})
 		.then(function(expectation) {
@@ -49,8 +53,15 @@ function get_started_expectation() {
 		});
 }
 
+function mind_blown_expectation() {
+	return apiai.get_intent_by_id(asset.MIND_BLOWN_INTENT_ID)
+		.then(function(intent) {
+			return create_expectation(intent);
+		});
+}
+
 function explore_vonage_expectation() {
-	return apiai.get_intent_by_id(asset.CONTACT_VEE_MENU_ITEM_INTENT_ID)
+	return apiai.get_intent_by_id(asset.EXPLORE_VONAGE_INTENT_ID)
 		.then(function(intent) {
 			return create_expectation(intent);
 		});
@@ -156,7 +167,7 @@ function quick_reply_messages_expectation_helper(message, expectation, key) {
 	expectation.textMessages = !expectation.textMessages ? [] : expectation.textMessages;
 	// quick reply titile is another text message during the test
 	expectation.textMessages.push({
-		key: key + " (quick rcleeply titile)",
+		key: key + " (quick reply title)",
 		content: message.title
 	})
 

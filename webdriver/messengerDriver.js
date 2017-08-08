@@ -1,5 +1,6 @@
 var Promise = require('bluebird');
 var webdriver = require('selenium-webdriver');
+var emojiStrip = require('emoji-strip');
 
 var asset = require('../asset/asset.js');
 var TextMessages = require('../messages/textMessages');
@@ -15,7 +16,6 @@ function MessengerDriver(driver, expectations) {
 
 	this.driver = driver.getDriver();
 	this.browser = driver.browser;
-	this.mode = driver.mode;
 
 	this.expectations = expectations;
 
@@ -32,6 +32,11 @@ function MessengerDriver(driver, expectations) {
 
 	this.get_started = get_started;
 	this.get_started_messages_check = get_started_messages_check;
+
+	this.click_explore_vonage_menu_item = click_explore_vonage_menu_item;
+
+	this.mind_blown = mind_blown;
+	this.mind_blown_messages_check = mind_blown_messages_check;
 
 	this.explore_vonage = explore_vonage;
 	this.explore_vonage_messages_check = explore_vonage_messages_check;
@@ -59,6 +64,7 @@ function MessengerDriver(driver, expectations) {
 
 	this.takeScreenshotThenSaveToFile = takeScreenshotThenSaveToFile;
 
+	// this.delay = delay;
 }
 
 module.exports = MessengerDriver;
@@ -67,17 +73,21 @@ module.exports = MessengerDriver;
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> class member methods <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 function open_messenger_page() {
-	return this.driver.get(asset.HR_CHATBOT_URL);
+	var that = this;
+
+	return that.driver.manage().window().maximize()
+		.then(function() {
+			return that.driver.get(asset.HR_CHATBOT_URL);
+		});
+
+	// return this.driver.get(asset.HR_CHATBOT_URL);
 }
 
 function log_into_messenger() {
 
 	var that = this
 
-	return that.driver.manage().window().maximize()
-		.then(function() {
-			return that.driver.wait(until.elementLocated(By.name("email")), 3000);
-		})
+	return that.driver.wait(until.elementLocated(By.name("email")), 3000)
 		.then(function() {
 			return that.driver.findElement(By.name("email"));
 		})
@@ -112,9 +122,9 @@ function get_started() {
 
 	var that = this;
 
-	return that.driver.wait(until.elementLocated(By.linkText("Get Started")), 5000)
+	return that.driver.wait(until.elementLocated(By.linkText(asset.GET_STARTED_BUTTON)), 5000)
 		.then(function() {
-			that.driver.findElement(By.linkText("Get Started")).click()	
+			that.driver.findElement(By.linkText(asset.GET_STARTED_BUTTON)).click()	
 		})
 		.catch(function(err) {
 			if(err instanceof webdriver.error.TimeoutError) {
@@ -135,17 +145,30 @@ function get_started_messages_check(waitTime) {
 	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
 }
 
-function explore_vonage() {
-
+function click_explore_vonage_menu_item() {
 	var that = this;
-
 	return that.driver.findElement(By.css("a[class='_3km2'][role='button']")).click()
 		.then(function() {
-			return that.driver.wait(until.elementLocated(By.linkText("Explore Vonage")), 5000)
+			return that.driver.wait(until.elementLocated(By.linkText(asset.EXPLORE_VONAGE_MENU_ITEM)), 5000);
 		})
 		.then(function() {
-			return that.driver.findElement(By.linkText("Explore Vonage")).click();
+			return that.driver.findElement(By.linkText(asset.EXPLORE_VONAGE_MENU_ITEM)).click();
 		});
+}
+
+function mind_blown() {
+	return click_clap.call(this);
+}
+
+function mind_blown_messages_check(waitTime) {
+	var expectation = this.expectations['mind_blown'];
+	var expectedMessagesLength = Object.keys(this.messagesRecord).length + expectation.messagesAmount;
+
+	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
+}
+
+function explore_vonage() {
+	return click_quick_reply.call(this, asset.EXPLORE_VONAGE_QUICK_REPLY);
 }
 
 function explore_vonage_messages_check(waitTime) {
@@ -156,7 +179,9 @@ function explore_vonage_messages_check(waitTime) {
 	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
 }
 
-function our_culture() { return click_quick_reply.call(this, "Our Culture"); }
+function our_culture() { 
+	return click_quick_reply.call(this, asset.OUR_CULTURE_QUICK_REPLY);
+}
 
 function our_culture_messages_check(waitTime) {
 
@@ -167,7 +192,9 @@ function our_culture_messages_check(waitTime) {
 
 }
 
-function our_values() { return click_quick_reply.call(this, "Our Values"); }
+function our_values() { 
+	return click_quick_reply.call(this, asset.OUR_VALUES_QUICK_REPLY);
+}
 
 function our_values_messages_check(waitTime) {
 
@@ -178,7 +205,9 @@ function our_values_messages_check(waitTime) {
 
 }
 
-function join_our_team() { return click_quick_reply.call(this, "Join Our Team"); }
+function join_our_team() { 
+	return click_quick_reply.call(this, asset.JOIN_OUR_TEAM_QUICK_REPLY);
+}
 
 function join_our_team_messages_check(waitTime) {
 
@@ -188,7 +217,9 @@ function join_our_team_messages_check(waitTime) {
 	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
 }
 
-function choose_location() { return click_quick_reply.call(this, "Holmdel"); }
+function choose_location() {
+	return click_quick_reply.call(this, asset.HOLMDEL_QUICK_REPLY);
+}
 
 function choose_location_messages_check(waitTime) {
 	
@@ -198,7 +229,9 @@ function choose_location_messages_check(waitTime) {
 	return messages_check_helper.call(this, expectation, expectedMessagesLength, waitTime);
 }
 
-function choose_job_type() { return click_quick_reply.call(this, "Technology"); }
+function choose_job_type() { 
+	return click_quick_reply.call(this, asset.TECHNOLOGY_QUICK_REPLY);
+}
 
 function choose_job_type_messages_check(waitTime) {
 	
@@ -218,6 +251,9 @@ function delete_conversation() {
 		})
 		.then(function() {
 			return that.driver.findElement(By.linkText("Delete")).click();
+		})
+		.then(function() {
+			return that.driver.wait(until.elementLocated(By.css("button[class='_3quh _30yy _2t_ _3ay_ _5ixy']")), 5000)
 		})
 		.then(function() {
 			return that.driver.findElement(By.css("button[class='_3quh _30yy _2t_ _3ay_ _5ixy']")).click();
@@ -308,6 +344,12 @@ function takeScreenshotThenSaveToFile(title, fileSystem) {
 		});
 }
 
+function delay(t) {
+   return new Promise(function(resolve) { 
+       setTimeout(resolve, t)
+   });
+}
+
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> helper function <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -364,36 +406,44 @@ function wait(messages, expectedMessagesLength, waitTime) {
 
 function click_quick_reply(target) {
 
-	var that = this;
+	return this.driver.executeScript(
+		"var targetToClick = '" + target + "'; " + 
+		"var quickReplies = document.querySelectorAll('div[class=\"_10-e\"]'); \
+		if(quickReplies.length === 0) { \
+			console.log('No quickReplies found!'); \
+		} else { \
+			for(var i = 0; i < quickReplies.length; i ++) { \
+				if(quickReplies[i].innerHTML === targetToClick) { \
+					quickReplies[i].click(); \
+					break; \
+				} \
+			} \
+		} \
+		"
+	)
+	.then(function() {
+		console.log("Click quick reply successfully!");
+	});
 
-	return that.driver.findElements(By.css("div[class='_10-e']"))
-		.then(function(divs) {
-			return Promise.each(divs, function(div, index) {
-				return div.getText().then(function(text) {
-					if(text === target) {
-						div.click().then(function() {
-							// Use rejection to break Promise each
-							throw {code: "success", index: index};
-						});
-					}
-				});
-			});
-		})
-		.catch(function(err) {
-			if(typeof err === "object" && err.code === "success") {
-				console.log('Click quick reply successfully');
-			} else {
-				throw err;
-			}
-		});
 }
 
-// function delay(t) {
-//    return new Promise(function(resolve) { 
-//        setTimeout(resolve, t)
-//    });
-// }
 
+function click_clap() {
+	var that = this;
+	return that.driver.wait(until.elementLocated(By.css("div[class='_10-e']")), 5000)
+			.then(function() {
+				return that.driver.findElement(By.css("div[class='_10-e']")).click();
+			});
+}
+
+
+// have to scroll the window to bottom, otherwise the dissapeared quickreply will cause issue 
+function scrollChatWindowToBottom() {
+	return this.driver.executeScript("document.querySelector('div[class=\"_4u-c _1wfr _9hq\"]').scrollTop = document.querySelector('div[class=\"_4u-c _1wfr _9hq\"]').scrollHeight;")
+		.then(function() {
+			console.log("Scroll down to the bottom!")
+		});
+}
 
 
 

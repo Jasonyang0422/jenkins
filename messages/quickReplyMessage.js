@@ -24,16 +24,24 @@ function QuickReplyMessage(quickReplyMessage, messengerDriver) {
 		var options = this.expectedQuickReplyMessage.options;
 
 		if(divs && divs.length > 0 && !(that.expectedQuickReplyMessage.key in messengerDriver.messagesRecord)) {
-			return Promise.each(divs, function(div, index, length) {
-				return div.getText().then(function(text) {
-					if(text !== options[index]) {
-						throw new Error("'" + text + "' is not expected. Supposed option is '" + options[index] + "'");
-					}
-				});
-			})
-			.then(function() {
+			
+			// return Promise.each(divs, function(div, index, length) {
+			// 	return div.getText().then(function(text) {
+			// 		if(text !== options[index]) {
+			// 			throw new Error("'" + text + "' is not expected. Supposed option is '" + options[index] + "'");
+			// 		}
+			// 	});
+			// })
+			// .then(function() {
+			// 	that.expectedQuickReplyMessage.options = options;
+			// 	messengerDriver.record_message(that.expectedQuickReplyMessage, 'quickReply');	
+			// });
+
+			//below logic doesn't check the options of quick reply
+			return new Promise(function(resolve, reject) {
 				that.expectedQuickReplyMessage.options = options;
-				messengerDriver.record_message(that.expectedQuickReplyMessage, 'quickReply');	
+				messengerDriver.record_message(that.expectedQuickReplyMessage, 'quickReply');
+				return resolve();
 			});
 		}
 		 

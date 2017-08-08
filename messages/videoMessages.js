@@ -29,30 +29,42 @@ function VideoMessages(videoMessages, messengerDriver) {
 
 			if(videos.length > 0) {
 
-				// phantomjs doesn't support video and audio. It can find the video tag though.
-				if(messengerDriver.browser == 'phantomjs') {
-					return Promise.each(videos, function(video) {
-						for(var i = 0; i < that.expectedVideoMessages.length; i++) {
-							var expectedVideo = that.expectedVideoMessages[i];
-							if(!(expectedVideo.key in messengerDriver.messagesRecord)) {
-								expectedVideo.src = null;
-								messengerDriver.record_message(expectedVideo, 'video');						
-							}
-						}
-					});
-				} else {
-					return Promise.each(videos, function(video) {
-						return video.getAttribute('src').then(function(src) {
-							that.expectedVideoMessages.forEach(function(videoMessage) {
-								if(src.includes(videoMessage.src)) {
-									videoMessage.src = src;
-									messengerDriver.record_message(videoMessage, 'video');
-								}
-							});
-						});
-					});
+				// // phantomjs doesn't support video and audio. It can find the video tag though.
+				// if(messengerDriver.browser == 'phantomjs') {
+				// 	return Promise.each(videos, function(video) {
+				// 		for(var i = 0; i < that.expectedVideoMessages.length; i++) {
+				// 			var expectedVideo = that.expectedVideoMessages[i];
+				// 			if(!(expectedVideo.key in messengerDriver.messagesRecord)) {
+				// 				expectedVideo.src = null;
+				// 				messengerDriver.record_message(expectedVideo, 'video');						
+				// 			}
+				// 		}
+				// 	});
+				// } else {
+				// 	return Promise.each(videos, function(video) {
+				// 		return video.getAttribute('src').then(function(src) {
+				// 			that.expectedVideoMessages.forEach(function(videoMessage) {
+				// 				if(src.includes(videoMessage.src)) {
+				// 					videoMessage.src = src;
+				// 					messengerDriver.record_message(videoMessage, 'video');
+				// 				}
+				// 			});
+				// 		});
+				// 	});
 
-				}
+				// }
+
+				// below logic doesn't check video url, which is more scalable.
+				// because once video is re-uploaded to FB, ID will be changed. 
+				return Promise.each(videos, function(video) {
+					for(var i = 0; i < that.expectedVideoMessages.length; i++) {
+						var expectedVideo = that.expectedVideoMessages[i];
+						if(!(expectedVideo.key in messengerDriver.messagesRecord)) {
+							expectedVideo.src = null;
+							messengerDriver.record_message(expectedVideo, 'video');						
+						}
+					}
+				});
 			}
 		}
 	};
